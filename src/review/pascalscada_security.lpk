@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="pascalscada_security"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="Fabio Luis Girardi &lt;fabio@pascalscada.com>"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="../../lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Description Value="Basic user management for GUI and non-GUI applications "/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
+    <Version Major="1"/>
+    <Files Count="4">
+      <Item1>
+        <Filename Value="pascalscada.security.control_security_manager.pas"/>
+        <UnitName Value="pascalscada.security.control_security_manager"/>
+      </Item1>
+      <Item2>
+        <Filename Value="pascalscada.security.basic_user_management.pas"/>
+        <UnitName Value="pascalscada.security.basic_user_management"/>
+      </Item2>
+      <Item3>
+        <Filename Value="pascalscada.security.security_exceptions.pas"/>
+        <UnitName Value="pascalscada.security.security_exceptions"/>
+      </Item3>
+      <Item4>
+        <Filename Value="pascalscada.security.security_texts.pas"/>
+        <UnitName Value="pascalscada.security.security_texts"/>
+      </Item4>
+    </Files>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="../../languages"/>
+      <EnableI18NForLFM Value="True"/>
+    </i18n>
+    <RequiredPkgs Count="1">
+      <Item1>
+        <PackageName Value="FCL"/>
+      </Item1>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

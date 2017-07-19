@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="pascalscada_secure_actions"/>
+    <Type Value="RunAndDesignTime"/>
+    <Author Value="Fabio Luis Girardi &lt;fabio@pascalscada.com>"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="../../lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Description Value="Security enabled actions"/>
+    <License Value="LGPL with linking exception, v2.1 (same from Lazarus LCL)"/>
+    <Version Major="1"/>
+    <Files Count="10">
+      <Item1>
+        <Filename Value="pascalscada.secure_actions.authorized_by_user_management_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.authorized_by_user_management_action"/>
+      </Item1>
+      <Item2>
+        <Filename Value="pascalscada.secure_actions.login_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.login_action"/>
+      </Item2>
+      <Item3>
+        <Filename Value="pascalscada.secure_actions.login_logout_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.login_logout_action"/>
+      </Item3>
+      <Item4>
+        <Filename Value="pascalscada.secure_actions.logout_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.logout_action"/>
+      </Item4>
+      <Item5>
+        <Filename Value="pascalscada.secure_actions.manage_users_and_groups_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.manage_users_and_groups_action"/>
+      </Item5>
+      <Item6>
+        <Filename Value="pascalscada.secure_actions.request_authorized_user.pas"/>
+        <UnitName Value="pascalscada.secure_actions.request_authorized_user"/>
+      </Item6>
+      <Item7>
+        <Filename Value="pascalscada.secure_actions.secure_action.pas"/>
+        <UnitName Value="pascalscada.secure_actions.secure_action"/>
+      </Item7>
+      <Item8>
+        <Filename Value="pascalscada.secure_actions.tag_value_actions.pas"/>
+        <UnitName Value="pascalscada.secure_actions.tag_value_actions"/>
+      </Item8>
+      <Item9>
+        <Filename Value="pascalscada.secure_actions.texts.pas"/>
+        <UnitName Value="pascalscada.secure_actions.texts"/>
+      </Item9>
+      <Item10>
+        <Filename Value="pascalscada_secure_actions_register.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="pascalscada_secure_actions_register"/>
+      </Item10>
+    </Files>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="../../languages"/>
+      <EnableI18NForLFM Value="True"/>
+    </i18n>
+    <RequiredPkgs Count="3">
+      <Item1>
+        <PackageName Value="pascalscada_security"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCLBase"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="FCL"/>
+      </Item3>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>

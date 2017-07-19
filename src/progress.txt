@@ -1,0 +1,89 @@
+=============== Standard ===============
+TButton           = TSecureButton
+TLabel            = TSecureLabel
+TEdit             = TSecureEdit
+TMemo             = TSecureMemo
+TToggleButton     = TSecureToggleButton
+TCheckBox         = TSecureCheckBox
+TRadioButton      = TSecureRadioButton
+TListBox          = TSecureListBox
+TComboBox         = TSecureComboBox
+TScrollBar        = TSecureScrollBar
+TGroupBox         = TSecureGroupBox
+TRadioGroup       = TSecureRadioGroup
+TCheckGroup       = TSecureCheckGroup
+TPanel            = TSecurePanel
+
+============== Additional ==============
+TBitBtn           = 
+TSpeedButton      = 
+TStaticText       = 
+TImage            = TSecureImage
+TShape            = 
+TBevel            = 
+TPaintBox         = 
+TNotebook         = 
+TLabeledEdit      = 
+TSplitter         = 
+TTrayIcon         = 
+TControlBar       = 
+TFlowPanel        = 
+TMaskEdit         = TSecureMaskEdit
+TCheckListBox     = TSecureCheckListBox
+TScrollBox        = TSecureScrollBox
+TStringGrid       = 
+TDrawGrid         = 
+TPairSplitter     = 
+TColorBox         = 
+TColorListBox     = 
+TValueListEditor  = 
+
+============ Common Controls ===========
+TTrackBar         = TSecureTrackBar
+TProgressBar      = TSecureProgressBar
+TTreeView         = 
+TListView         = 
+TStatusBar        = 
+TToolBar          = 
+TCoolBar          = 
+TUpDown           = TSecureUpDown
+TPageControl      = 
+TTabControl       = 
+THeaderControl    = 
+
+============= Data Controls ============
+TDBNavigator      = TSecureDBNavigator
+TDBText           = TSecureDBText
+TDBEdit           = TSecureDBEdit
+TDBMemo           = TSecureDBMemo
+TDBImage          = 
+TDBListBox        = 
+TDBLookupListBox  = 
+TDBComboBox       = 
+TDBLookupComboBox = 
+TDBCheckBox       = 
+TDBRadioGroup     = 
+TDBCalendar       = 
+TDBGroupBox       = 
+TDBDateEdit       = 
+TDBGrid           = 
+
+================= Misc =================
+TColorButton      = 
+TSpinEdit         = 
+TFloatSpinEdit    = 
+TArrow            = 
+TCalendar         = 
+TEditButton       = 
+TFileNameEdit     = 
+TDirectoryEdit    = 
+TDateEdit         = 
+TTimeEdit         = 
+TCalcEdit         = 
+TFileListBox      = 
+TFilterComboBox   = 
+TComboBoxEx       = 
+TCheckComboBox    = 
+TButtonPanel      = 
+TShellTreeView    = 
+TShellListView    = 
