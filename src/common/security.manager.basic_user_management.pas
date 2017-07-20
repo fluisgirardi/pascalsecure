@@ -14,7 +14,7 @@ type
 
   { TpSCADABasicUserManagement }
 
-  TpSCADABasicUserManagement = class(TComponent)
+  TBasicUserManagement = class(TComponent)
   protected
     FLoggedUser:Boolean;
     FCurrentUserName,
@@ -84,21 +84,19 @@ type
     property CurrentUserLogin:String read GetCurrentUserLogin;
   end;
 
-Resourcestring
-  SUserManagementIsSet = 'User management component already set!';
-
 implementation
 
-uses pascalscada.security.control_security_manager;
+uses security.exceptions,
+     security.manager.controls_manager;
 
-constructor TpSCADABasicUserManagement.Create(AOwner:TComponent);
+constructor TBasicUserManagement.Create(AOwner:TComponent);
 begin
   inherited Create(AOwner);
 
-  if GetPascalSCADAControlSecurityManager.UserManagement=nil then
-    GetPascalSCADAControlSecurityManager.UserManagement:=Self
+  if GetControlSecurityManager.UserManagement=nil then
+    GetControlSecurityManager.UserManagement:=Self
   else
-    raise Exception.Create(SUserManagementIsSet);
+    raise EUserManagementIsSet.Create;
 
   FLoggedUser:=false;
   FCurrentUserName:='';
@@ -109,17 +107,17 @@ begin
   FRegisteredSecurityCodes:=TFPGStringList.Create;
 end;
 
-destructor  TpSCADABasicUserManagement.Destroy;
+destructor  TBasicUserManagement.Destroy;
 begin
-  if GetPascalSCADAControlSecurityManager.UserManagement=Self then
-    GetPascalSCADAControlSecurityManager.UserManagement:=nil;
+  if GetControlSecurityManager.UserManagement=Self then
+    GetControlSecurityManager.UserManagement:=nil;
 
   if FRegisteredSecurityCodes<>nil then
     FRegisteredSecurityCodes.Destroy;
   inherited Destroy;
 end;
 
-function TpSCADABasicUserManagement.Login(Userlogin, userpassword: String; var UID:Integer):Boolean; overload;
+function TBasicUserManagement.Login(Userlogin, userpassword: String; var UID:Integer):Boolean; overload;
 begin
   Result:=CheckUserAndPassword(Userlogin, userpassword, UID, true);
   if Result then begin
@@ -128,50 +126,50 @@ begin
     FCurrentUserLogin:=Userlogin;
     FLoggedSince:=Now;
     Result:=true;
-    GetPascalSCADAControlSecurityManager.UpdateControls;
+    GetControlSecurityManager.UpdateControls;
     DoSuccessfulLogin;
   end;
 end;
 
-procedure   TpSCADABasicUserManagement.Logout;
+procedure   TBasicUserManagement.Logout;
 begin
   FLoggedUser:=false;
   FCurrentUserName:='';
   FCurrentUserLogin:='';
   FUID:=-1;
   FLoggedSince:=Now;
-  GetPascalSCADAControlSecurityManager.UpdateControls;
+  GetControlSecurityManager.UpdateControls;
 end;
 
-function    TpSCADABasicUserManagement.SecurityCodeExists(sc:String):Boolean;
+function    TBasicUserManagement.SecurityCodeExists(sc:String):Boolean;
 begin
   Result:=FRegisteredSecurityCodes.IndexOf(sc)>=0;
 end;
 
-procedure   TpSCADABasicUserManagement.RegisterSecurityCode(sc:String);
+procedure   TBasicUserManagement.RegisterSecurityCode(sc:String);
 begin
   if Not SecurityCodeExists(sc) then
     FRegisteredSecurityCodes.Add(sc);
 end;
 
-procedure   TpSCADABasicUserManagement.UnregisterSecurityCode(sc:String);
+procedure   TBasicUserManagement.UnregisterSecurityCode(sc:String);
 begin
   if SecurityCodeExists(sc) then
     FRegisteredSecurityCodes.Delete(FRegisteredSecurityCodes.IndexOf(sc));
 end;
 
-function TpSCADABasicUserManagement.GetRegisteredAccessCodes: TFPGStringList;
+function TBasicUserManagement.GetRegisteredAccessCodes: TFPGStringList;
 begin
   Result:=TFPGStringList.Create;
   Result.Assign(FRegisteredSecurityCodes);
 end;
 
-function TpSCADABasicUserManagement.GetUID: Integer;
+function TBasicUserManagement.GetUID: Integer;
 begin
   Result:=FUID;
 end;
 
-function    TpSCADABasicUserManagement.GetLoginTime:TDateTime;
+function    TBasicUserManagement.GetLoginTime:TDateTime;
 begin
   if FLoggedUser then
     Result:=FLoggedSince
@@ -179,39 +177,39 @@ begin
     Result:=Now;
 end;
 
-procedure TpSCADABasicUserManagement.SetInactiveTimeOut(AValue: Cardinal);
+procedure TBasicUserManagement.SetInactiveTimeOut(AValue: Cardinal);
 begin
   FInactiveTimeOut:=AValue;
 end;
 
-function TpSCADABasicUserManagement.GetLoggedUser:Boolean;
+function TBasicUserManagement.GetLoggedUser:Boolean;
 begin
   Result:=FLoggedUser;
 end;
 
-function TpSCADABasicUserManagement.GetCurrentUserName:String;
+function TBasicUserManagement.GetCurrentUserName:String;
 begin
   Result:=FCurrentUserName;
 end;
 
-function TpSCADABasicUserManagement.GetCurrentUserLogin:String;
+function TBasicUserManagement.GetCurrentUserLogin:String;
 begin
   Result:=FCurrentUserLogin;
 end;
 
-procedure TpSCADABasicUserManagement.DoSuccessfulLogin;
+procedure TBasicUserManagement.DoSuccessfulLogin;
 begin
   if Assigned(FSuccessfulLogin) then
     FSuccessfulLogin(Self);
 end;
 
-procedure TpSCADABasicUserManagement.DoFailureLogin;
+procedure TBasicUserManagement.DoFailureLogin;
 begin
   if Assigned(FFailureLogin) then
     FFailureLogin(Self);
 end;
 
-procedure TpSCADABasicUserManagement.DoUserChanged;
+procedure TBasicUserManagement.DoUserChanged;
 begin
   if Assigned(FUserChanged) then
     try

@@ -7,7 +7,7 @@ interface
 uses
   Classes,
   sysutils,
-  security.manager.graphical_user_management;
+  security.manager.basic_user_management;
 
 type
 
@@ -23,7 +23,7 @@ type
 
   { TpSCADACustomizedUserManagement }
 
-  TpSCADACustomizedUserManagement = class(TpSCADABasicGraphicalUserManagement)
+  TCustomUserManagement = class(TBasicUserManagement)
   private
     FCheckUserAndPasswordEvent:TCheckUserAndPasswordEvent;
     FGetUserName              :TGetUserNameAndLogin;
@@ -74,9 +74,9 @@ type
 
 implementation
 
-{ TpSCADACustomizedUserManagement }
+{ TCustomUserManagement }
 
-function TpSCADACustomizedUserManagement.CheckUserAndPassword(User,
+function TCustomUserManagement.CheckUserAndPassword(User,
   Pass: String; var UserID: Integer; LoginAction: Boolean): Boolean;
 begin
   Result:=false;
@@ -88,7 +88,7 @@ begin
   end;
 end;
 
-function TpSCADACustomizedUserManagement.GetCurrentUserName: String;
+function TCustomUserManagement.GetCurrentUserName: String;
 begin
   Result:='';
   if FLoggedUser then
@@ -100,7 +100,7 @@ begin
     end;
 end;
 
-function TpSCADACustomizedUserManagement.GetCurrentUserLogin: String;
+function TCustomUserManagement.GetCurrentUserLogin: String;
 begin
   Result:='';
   if FLoggedUser then
@@ -112,7 +112,7 @@ begin
     end;
 end;
 
-function TpSCADACustomizedUserManagement.CanAccess(sc: String; aUID: Integer
+function TCustomUserManagement.CanAccess(sc: String; aUID: Integer
   ): Boolean;
 begin
   Result:=(Trim(sc)='');
@@ -125,7 +125,7 @@ begin
     end;
 end;
 
-procedure TpSCADACustomizedUserManagement.Logout;
+procedure TCustomUserManagement.Logout;
 begin
   inherited Logout;
   if Assigned(FLogoutEvent) then
@@ -135,25 +135,25 @@ begin
     end;
 end;
 
-procedure TpSCADACustomizedUserManagement.Manage;
+procedure TCustomUserManagement.Manage;
 begin
   if Assigned(FManageUsersAndGroupsEvent) then
     FManageUsersAndGroupsEvent(Self);
 end;
 
-procedure TpSCADACustomizedUserManagement.ValidateSecurityCode(sc: String);
+procedure TCustomUserManagement.ValidateSecurityCode(sc: String);
 begin
   if Assigned(FValidadeSecurityCode) then
     FValidadeSecurityCode(sc);
 end;
 
-procedure TpSCADACustomizedUserManagement.RegisterSecurityCode(sc: String);
+procedure TCustomUserManagement.RegisterSecurityCode(sc: String);
 begin
   if Assigned(FRegisterSecurityCode) then
     FRegisterSecurityCode(sc);
 end;
 
-function TpSCADACustomizedUserManagement.CanAccess(sc: String): Boolean;
+function TCustomUserManagement.CanAccess(sc: String): Boolean;
 begin
   Result:=(Trim(sc)='');
   if FLoggedUser then

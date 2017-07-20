@@ -44,11 +44,13 @@ type
 
   { TpSCADAControlSecurityManager }
 
-  TpSCADAControlSecurityManager = class(TComponent)
+  { TControlSecurityManager }
+
+  TControlSecurityManager = class(TComponent)
   private
     FSecureControls:TFPGSecureControlsList;
-    FUserManagement:TpSCADABasicUserManagement;
-    procedure SetUserManagement(um:TpSCADABasicUserManagement);
+    FUserManagement:TBasicUserManagement;
+    procedure SetUserManagement(um:TBasicUserManagement);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -71,98 +73,93 @@ type
     function   GetRegisteredAccessCodes:TFPGStringList;
     function   CheckIfUserIsAllowed(sc:String; RequireUserLogin:Boolean; var userlogin:String):Boolean;
   published
-    property UserManagement:TpSCADABasicUserManagement read FUserManagement write SetUserManagement;
+    property UserManagement:TBasicUserManagement read FUserManagement write SetUserManagement;
   end;
 
-  function GetPascalSCADAControlSecurityManager:TpSCADAControlSecurityManager;
+  function GetControlSecurityManager:TControlSecurityManager;
   procedure SetControlSecurityCode(var CurrentSecurityCode:String; const NewSecurityCode:String; ControlSecurityIntf:ISecureControlInterface);
-
-resourcestring
-    SAccessDenied                         = 'Access denied!';
-    SSecurityCodeIsInUseYet               = 'Security code still being used!';
-    SInvalidUserManagementComponent       = 'Invalid user manager component';
-    SUserManagementIsSet                  = 'User management component already set!';
-    SControlSecurityManagerStillBeingUsed = 'Control security manager still being used. Maybe some control forget the unregister on their destructor?';
 
 implementation
 
-constructor TpSCADAControlSecurityManager.Create(AOwner: TComponent);
+uses security.exceptions;
+
+constructor TControlSecurityManager.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FUserManagement:=nil;
   FSecureControls:=TFPGSecureControlsList.Create;
 end;
 
-destructor TpSCADAControlSecurityManager.Destroy;
+destructor TControlSecurityManager.Destroy;
 begin
   if FSecureControls.Count>0 then
-    raise Exception.Create(SControlSecurityManagerStillBeingUsed);
+    raise EControlSecurityManagerStillBeingUsed.Create;
   FreeAndNil(FSecureControls);
   inherited Destroy;
 end;
 
-function TpSCADAControlSecurityManager.Login(Userlogin, Userpassword: String; var UID:Integer): Boolean; overload;
+function TControlSecurityManager.Login(Userlogin, Userpassword: String; var UID:Integer): Boolean; overload;
 begin
   if FUserManagement<>nil then
-    Result:=TpSCADABasicUserManagement(FUserManagement).Login(Userlogin,Userpassword,UID)
+    Result:=TBasicUserManagement(FUserManagement).Login(Userlogin,Userpassword,UID)
   else
     Result:=false;
 end;
 
-function   TpSCADAControlSecurityManager.Login:Boolean;
+function   TControlSecurityManager.Login:Boolean;
 begin
   if FUserManagement<>nil then
-    Result:=TpSCADABasicUserManagement(FUserManagement).Login
+    Result:=TBasicUserManagement(FUserManagement).Login
   else
     Result:=false;
 end;
 
-procedure  TpSCADAControlSecurityManager.Logout;
+procedure  TControlSecurityManager.Logout;
 begin
   if FUserManagement<>nil then
-    TpSCADABasicUserManagement(FUserManagement).Logout
+    TBasicUserManagement(FUserManagement).Logout
 end;
 
-procedure  TpSCADAControlSecurityManager.Manage;
+procedure  TControlSecurityManager.Manage;
 begin
   if FUserManagement<>nil then
-    TpSCADABasicUserManagement(FUserManagement).Manage;
+    TBasicUserManagement(FUserManagement).Manage;
 end;
 
-function TpSCADAControlSecurityManager.GetCurrentUserlogin: String;
+function TControlSecurityManager.GetCurrentUserlogin: String;
 begin
   Result:='';
   if FUserManagement<>nil then
-    Result:=TpSCADABasicUserManagement(FUserManagement).CurrentUserLogin;
+    Result:=TBasicUserManagement(FUserManagement).CurrentUserLogin;
 end;
 
-function TpSCADAControlSecurityManager.HasUserLoggedIn: Boolean;
+function TControlSecurityManager.HasUserLoggedIn: Boolean;
 begin
   Result:=false;
   if FUserManagement<>nil then
-    Result:=TpSCADABasicUserManagement(FUserManagement).UserLogged;
+    Result:=TBasicUserManagement(FUserManagement).UserLogged;
 end;
 
-procedure  TpSCADAControlSecurityManager.TryAccess(sc:String);
+procedure  TControlSecurityManager.TryAccess(sc:String);
 begin
   if FUserManagement<>nil then
-    if not TpSCADABasicUserManagement(FUserManagement).CanAccess(sc) then
-      raise Exception.Create(SAccessDenied);
+    if not TBasicUserManagement(FUserManagement).CanAccess(sc) then
+      raise ESecuritySystemAccessDenied.Create(sc);
 end;
 
-procedure TpSCADAControlSecurityManager.SetUserManagement(um:TpSCADABasicUserManagement);
+procedure TControlSecurityManager.SetUserManagement(um: TBasicUserManagement);
 begin
-  if (um<>nil) and (not (um is TpSCADABasicUserManagement)) then
-    raise Exception.Create(SInvalidUserManagementComponent);
+  if (um<>nil) and (not (um is TBasicUserManagement)) then
+    raise EInvalidUserManagementComponent.Create;
 
   if (um<>nil) and (FUserManagement<>nil) then
-    raise Exception.Create(SUserManagementIsSet);
+    raise EUserManagementIsSet.Create;
 
   FUserManagement:=um;
   UpdateControls;
 end;
 
-procedure  TpSCADAControlSecurityManager.RegisterControl(control:ISecureControlInterface);
+procedure  TControlSecurityManager.RegisterControl(control:ISecureControlInterface);
 begin
   if FSecureControls.IndexOf(control)=-1 then begin;
     FSecureControls.Add(control);
@@ -170,7 +167,7 @@ begin
   end;
 end;
 
-procedure  TpSCADAControlSecurityManager.UnRegisterControl(control:ISecureControlInterface);
+procedure  TControlSecurityManager.UnRegisterControl(control:ISecureControlInterface);
 var
   idx:LongInt;
 begin
@@ -179,7 +176,7 @@ begin
     FSecureControls.Delete(idx);
 end;
 
-procedure  TpSCADAControlSecurityManager.UpdateControls;
+procedure  TControlSecurityManager.UpdateControls;
 var
   c:LongInt;
   intf: ISecureControlInterface;
@@ -190,29 +187,29 @@ begin
   end;
 end;
 
-function   TpSCADAControlSecurityManager.CanAccess(sc:String):Boolean;
+function   TControlSecurityManager.CanAccess(sc:String):Boolean;
 begin
   Result:=true;
 
   if sc='' then exit;
 
-  if (FUserManagement<>nil) and (FUserManagement is TpSCADABasicUserManagement) then
-    Result:=TpSCADABasicUserManagement(FUserManagement).CanAccess(sc);
+  if (FUserManagement<>nil) and (FUserManagement is TBasicUserManagement) then
+    Result:=TBasicUserManagement(FUserManagement).CanAccess(sc);
 end;
 
-procedure  TpSCADAControlSecurityManager.ValidateSecurityCode(sc:String);
+procedure  TControlSecurityManager.ValidateSecurityCode(sc:String);
 begin
   if FUserManagement<>nil then
-    TpSCADABasicUserManagement(FUserManagement).ValidateSecurityCode(sc);
+    TBasicUserManagement(FUserManagement).ValidateSecurityCode(sc);
 end;
 
-procedure  TpSCADAControlSecurityManager.RegisterSecurityCode(sc:String);
+procedure  TControlSecurityManager.RegisterSecurityCode(sc:String);
 begin
   if FUserManagement<>nil then
-    TpSCADABasicUserManagement(FUserManagement).RegisterSecurityCode(sc);
+    TBasicUserManagement(FUserManagement).RegisterSecurityCode(sc);
 end;
 
-procedure  TpSCADAControlSecurityManager.UnregisterSecurityCode(sc:String);
+procedure  TControlSecurityManager.UnregisterSecurityCode(sc:String);
 var
   being_used:Boolean;
   c:LongInt;
@@ -222,41 +219,41 @@ begin
     being_used:=being_used or (ISecureControlInterface(FSecureControls.Items[c]).GetControlSecurityCode=sc);
 
   if being_used then
-    raise Exception.Create(SSecurityCodeIsInUseYet);
+    raise ESecurityCodeIsInUseYet.Create;
 
   if FUserManagement<>nil then
-    TpSCADABasicUserManagement(FUserManagement).UnregisterSecurityCode(sc);
+    TBasicUserManagement(FUserManagement).UnregisterSecurityCode(sc);
 end;
 
-function   TpSCADAControlSecurityManager.SecurityCodeExists(sc:String):Boolean;
+function   TControlSecurityManager.SecurityCodeExists(sc:String):Boolean;
 begin
   Result:=false;
   if FUserManagement<>nil then
-    Result:=TpSCADABasicUserManagement(FUserManagement).SecurityCodeExists(sc);
+    Result:=TBasicUserManagement(FUserManagement).SecurityCodeExists(sc);
 end;
 
-function TpSCADAControlSecurityManager.GetRegisteredAccessCodes: TFPGStringList;
+function TControlSecurityManager.GetRegisteredAccessCodes: TFPGStringList;
 begin
   if FUserManagement=nil then begin
     Result:=TFPGStringList.Create
   end else
-    Result:=TpSCADABasicUserManagement(FUserManagement).GetRegisteredAccessCodes;
+    Result:=TBasicUserManagement(FUserManagement).GetRegisteredAccessCodes;
 end;
 
-function TpSCADAControlSecurityManager.CheckIfUserIsAllowed(sc: String;
+function TControlSecurityManager.CheckIfUserIsAllowed(sc: String;
   RequireUserLogin: Boolean; var userlogin: String): Boolean;
 begin
   Result:=false;
   if FUserManagement<>nil then
-    Result:=TpSCADABasicUserManagement(FUserManagement).CheckIfUserIsAllowed(sc, RequireUserLogin, userlogin);
+    Result:=TBasicUserManagement(FUserManagement).CheckIfUserIsAllowed(sc, RequireUserLogin, userlogin);
 end;
 
 var
-  QPascalSCADAControlSecurityManager:TpSCADAControlSecurityManager;
+  QControlSecurityManager:TControlSecurityManager;
 
-function GetPascalSCADAControlSecurityManager: TpSCADAControlSecurityManager;
+function GetControlSecurityManager: TControlSecurityManager;
 begin
-  Result:=QPascalSCADAControlSecurityManager;
+  Result:=QControlSecurityManager;
 end;
 
 procedure SetControlSecurityCode(var CurrentSecurityCode: String;
@@ -267,7 +264,7 @@ begin
   if Trim(NewSecurityCode)='' then
     ControlSecurityIntf.CanBeAccessed(true)
   else
-    with GetPascalSCADAControlSecurityManager do begin
+    with GetControlSecurityManager do begin
       ValidateSecurityCode(NewSecurityCode);
       if not SecurityCodeExists(NewSecurityCode) then
         RegisterSecurityCode(NewSecurityCode);
@@ -279,9 +276,9 @@ begin
 end;
 
 initialization
-  QPascalSCADAControlSecurityManager:=TpSCADAControlSecurityManager.Create(nil);
+  QControlSecurityManager:=TControlSecurityManager.Create(nil);
 finalization
-  FreeAndNil(QPascalSCADAControlSecurityManager);
+  FreeAndNil(QControlSecurityManager);
 
 end.
 
