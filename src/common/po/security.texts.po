@@ -1,0 +1,35 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: security.texts.saccessdenied
+msgid "Access denied!"
+msgstr ""
+
+#: security.texts.scontrolsecuritymanagerstillbeingused
+msgid "Control security manager still being used. Maybe some control forget the unregister on their destructor?"
+msgstr ""
+
+#: security.texts.sinvalidusermanagementcomponent
+msgid "Invalid user manager component"
+msgstr ""
+
+#: security.texts.snouserloggedintoaccessobject
+msgid ""
+"Access denied!\n"
+"No user logged in to access object protected by security code \"%s\". Did you forget to do Login?\n"
+msgstr ""
+
+#: security.texts.ssecuritycodeisinuseyet
+msgid "Security code still being used!"
+msgstr ""
+
+#: security.texts.suserhasnotallowedtoaccessobject
+msgid ""
+"Access denied!\n"
+"User \"%s\" isn't allowed to access object protected by security code \"%s\"\n"
+msgstr ""
+
+#: security.texts.susermanagementisset
+msgid "User management component already set!"
+msgstr ""
+

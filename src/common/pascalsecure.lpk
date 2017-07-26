@@ -12,7 +12,7 @@
     <Description Value="A security system for Lazarus LCL"/>
     <License Value="LGPL v2.1 with linking exception"/>
     <Version Major="1"/>
-    <Files Count="5">
+    <Files Count="6">
       <Item1>
         <Filename Value="security.exceptions.pas"/>
         <UnitName Value="security.exceptions"/>
@@ -33,6 +33,10 @@
         <Filename Value="security.texts.pas"/>
         <UnitName Value="security.texts"/>
       </Item5>
+      <Item6>
+        <Filename Value="security.manager.schema.pas"/>
+        <UnitName Value="security.manager.schema"/>
+      </Item6>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
