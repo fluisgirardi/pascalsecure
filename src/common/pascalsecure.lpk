@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="pascalsecure"/>
+    <Author Value="Fabio Luis Girardi &lt;fabio@pascalscada.com>"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Description Value="A security system for Lazarus LCL"/>
+    <License Value="LGPL v2.1 with linking exception"/>
+    <Version Major="1"/>
+    <Files Count="6">
+      <Item1>
+        <Filename Value="security.exceptions.pas"/>
+        <UnitName Value="security.exceptions"/>
+      </Item1>
+      <Item2>
+        <Filename Value="security.manager.basic_user_management.pas"/>
+        <UnitName Value="security.manager.basic_user_management"/>
+      </Item2>
+      <Item3>
+        <Filename Value="security.manager.controls_manager.pas"/>
+        <UnitName Value="security.manager.controls_manager"/>
+      </Item3>
+      <Item4>
+        <Filename Value="security.manager.custom_user_management.pas"/>
+        <UnitName Value="security.manager.custom_user_management"/>
+      </Item4>
+      <Item5>
+        <Filename Value="security.texts.pas"/>
+        <UnitName Value="security.texts"/>
+      </Item5>
+      <Item6>
+        <Filename Value="security.manager.schema.pas"/>
+        <UnitName Value="security.manager.schema"/>
+      </Item6>
+    </Files>
+    <i18n>
+      <EnableI18N Value="True"/>
+      <OutDir Value="po"/>
+      <EnableI18NForLFM Value="True"/>
+    </i18n>
+    <RequiredPkgs Count="1">
+      <Item1>
+        <PackageName Value="FCL"/>
+      </Item1>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
