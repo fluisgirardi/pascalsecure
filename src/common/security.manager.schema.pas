@@ -9,6 +9,12 @@ uses
 
 type
 
+  TUsrMgntType = (umtUnknown,
+                  umtLevel,
+                  umtAuthorizationByUser,
+                  umtAuthorizationByGroup,
+                  umtAuthorizationByUserAndGroup);
+
   //: Implements a simple authorization code
   TAuthorization = class(TObject)
   protected
