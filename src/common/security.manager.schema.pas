@@ -9,8 +9,7 @@ uses
 
 type
 
-  { TAuthorization }
-
+  //: Implements a simple authorization code
   TAuthorization = class(TObject)
   protected
     FAuthID: Integer;
@@ -22,17 +21,16 @@ type
     property Description:UTF8String read FDescription;
   end;
 
+  //: Implements a list of authorization codes
   TAuthorizationList = specialize TFPGMap<Integer, TAuthorization>;
 
-  { TAuthorizationList }
-
+  //: Implements a list with all authorization codes
   TAuthorizations = class(TAuthorizationList)
   public
     function AddAuthorization(aAuthID:Integer; aDescription:UTF8String):TAuthorization;
   end;
 
-  { TCustomUser }
-
+  //: Implements a simple user, with UID, Login, Description and enable/disable option.
   TCustomUser = class(TObject)
   protected
     //immutable fields.
@@ -59,10 +57,10 @@ type
     property UserBlocked:Boolean read FBlockedUser write SetBlockedUser;
   end;
 
+  //: Implements a list of simple users
   TUserList = specialize TFPGMap<Integer, TCustomUser>;
 
-  { TUserWithLevelAccess }
-
+  //: Implements a user with access level.
   TUserWithLevelAccess = class(TCustomUser)
   protected
     FUserLevel,
@@ -77,10 +75,10 @@ type
     property UserLevel:Integer read FUserLevel write SetUserLevel;
   end;
 
+  //: Implements a list of users with level access.
   TUserLevelList = specialize TFPGMap<Integer, TUserWithLevelAccess>;
 
-  { TAuthorizedUser }
-
+  //: Implements a user with user allowed authorizations
   TAuthorizedUser = class(TCustomUser)
   protected
     FUserAuthorizations:TAuthorizationList;
@@ -91,32 +89,173 @@ type
     function AuthorizationList:TAuthorizationList;
   end;
 
+  //: Implements a list of users with specific authorizations
   TAuthorizedUserList = specialize TFPGMap<Integer, TAuthorizedUser>;
 
-  { TCustomGroup }
-
+  //: Implements a simple usergroup with group-authorizations
   TCustomGroup = class(TObject)
   protected
     FGroupID: Integer;
     FGroupName: UTF8String;
+    FAuthorizations:TAuthorizationList;
   public
-    constructor Create(aGID:Integer; aGroupName:UTF8String);
+    constructor Create(aGID:Integer; aGroupName:UTF8String); virtual;
+    destructor Destroy; override;
+    function GroupAuthorizations:TAuthorizationList;
   published
     property GroupID:Integer read FGroupID;
     property GroupName:UTF8String read FGroupName;
   end;
 
+  {:
+  Implements a group were users hence the group authorizations, without user
+  specific authorizations.
+  }
+  TSimpleUserGroup = class(TCustomGroup)
+  protected
+    FUserList:TUserList;
+  public
+    constructor Create(aGID: Integer; aGroupName: UTF8String); override;
+    destructor Destroy; override;
+    function UsersList:TUserList;
+  end;
 
+  {:
+  Implements a group where users inherit the group authorizations, adding it
+  with user specific authorizations.
+  }
+  TUsersGroup = class(TCustomGroup)
+  protected
+    FUserList:TAuthorizedUserList;
+  public
+    constructor Create(aGID: Integer; aGroupName: UTF8String); override;
+    destructor Destroy; override;
+    function UsersList:TAuthorizedUserList;
+  end;
+
+
+  TUsrMgntSchema = class(TObject);
+
+  TUsrLevelMgntSchema = class(TUsrMgntSchema)
+  protected
+    FMaxLevel: Integer;
+    FMinLevel: Integer;
+    FUserList:TUserLevelList;
+  public
+    constructor Create(aMinLevel, aMaxLevel:Integer);
+    destructor Destroy; override;
+    function UserList:TUserLevelList;
+  published
+    property MinLevel:Integer read FMinLevel;
+    property MaxLevel:Integer read FMaxLevel;
+  end;
+
+  TAuthBasedUsrMgntSchema = class(TUsrMgntSchema)
+  protected
+    FAuthorizations:TAuthorizations;
+  public
+    constructor Create; virtual;
+    destructor Destroy; override;
+    function Autorizations:TAuthorizations;
+  end;
 
 implementation
+
+uses security.exceptions;
+
+constructor TAuthBasedUsrMgntSchema.Create;
+begin
+  inherited Create;
+  FAuthorizations:=TAuthorizations.Create;
+end;
+
+destructor TAuthBasedUsrMgntSchema.Destroy;
+begin
+  FreeAndNil(FAuthorizations);
+  inherited Destroy;
+end;
+
+function TAuthBasedUsrMgntSchema.Autorizations: TAuthorizations;
+begin
+  Result:=FAuthorizations;
+end;
+
+constructor TUsrLevelMgntSchema.Create(aMinLevel, aMaxLevel: Integer);
+begin
+  inherited Create;
+  FUserList:=TUserLevelList.Create;
+  if aMinLevel>=aMaxLevel then
+    raise EInvalidLevelRanges.Create(aMinLevel,aMaxLevel);
+end;
+
+destructor TUsrLevelMgntSchema.Destroy;
+begin
+  FreeAndNil(FUserList);
+  inherited Destroy;
+end;
+
+function TUsrLevelMgntSchema.UserList: TUserLevelList;
+begin
+  Result:=FUserList;
+end;
+
+{ TUsersGroup }
+
+constructor TUsersGroup.Create(aGID: Integer; aGroupName: UTF8String);
+begin
+  inherited Create(aGID, aGroupName);
+  FUserList:=TAuthorizedUserList.Create;
+end;
+
+destructor TUsersGroup.Destroy;
+begin
+  FreeAndNil(FUserList);
+  inherited Destroy;
+end;
+
+function TUsersGroup.UsersList: TAuthorizedUserList;
+begin
+  Result:=FUserList;
+end;
+
+{ TSimpleUsersGroup }
+
+constructor TSimpleUserGroup.Create(aGID: Integer; aGroupName: UTF8String);
+begin
+  inherited Create(aGID, aGroupName);
+  FUserList:=TUserList.Create;
+end;
+
+destructor TSimpleUserGroup.Destroy;
+begin
+  FreeAndNil(FUserList);
+  inherited Destroy;
+end;
+
+function TSimpleUserGroup.UsersList: TUserList;
+begin
+  Result:=FUserList;
+end;
 
 { TCustomGroup }
 
 constructor TCustomGroup.Create(aGID: Integer; aGroupName: UTF8String);
 begin
   inherited Create;
+  FAuthorizations:=TAuthorizationList.Create;
   FGroupID:=aGID;
   FGroupName:=aGroupName;
+end;
+
+destructor TCustomGroup.Destroy;
+begin
+  FreeAndNil(FAuthorizations);
+  inherited Destroy;
+end;
+
+function TCustomGroup.GroupAuthorizations: TAuthorizationList;
+begin
+  Result:=FAuthorizations;
 end;
 
 { TAuthorizedUser }

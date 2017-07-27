@@ -53,7 +53,17 @@ type
     constructor Create;
   end;
 
+  EInvalidLevelRanges = class(Exception)
+  public
+    constructor Create(aMinLevel, aMaxLevel:Integer);
+  end;
+
 implementation
+
+constructor EInvalidLevelRanges.Create(aMinLevel, aMaxLevel: Integer);
+begin
+  inherited Create(Format(SInvalidUserSchemaLevels,[aMinLevel,aMaxLevel]));
+end;
 
 { ESecurityCodeIsInUseYet }
 
