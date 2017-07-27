@@ -17,6 +17,7 @@ procedure Register;
 
 implementation
 
+{$R pascalsecure_visual.res}
 
 procedure Register;
 begin
