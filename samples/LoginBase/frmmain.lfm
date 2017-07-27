@@ -1,0 +1,83 @@
+object Form1: TForm1
+  Left = 0
+  Height = 401
+  Top = 0
+  Width = 429
+  ActiveControl = SecureButton1
+  Caption = 'Form1'
+  ClientHeight = 401
+  ClientWidth = 429
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Visible = False
+  object SecureButton1: TSecureButton
+    AnchorSideLeft.Control = BuLoginAndi
+    AnchorSideTop.Control = BuLoginAndi
+    AnchorSideTop.Side = asrBottom
+    Left = 5
+    Height = 25
+    Top = 35
+    Width = 99
+    Caption = 'SecureButton1'
+    OnClick = SecureButton1Click
+    SecurityCode = 'autorizacao1'
+    TabOrder = 0
+  end
+  object BuLoginAndi: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 5
+    Height = 25
+    Top = 5
+    Width = 75
+    BorderSpacing.Around = 5
+    Caption = 'Login A'
+    OnClick = BuLoginAndiClick
+    TabOrder = 1
+  end
+  object BuLogout: TButton
+    AnchorSideLeft.Control = BuLoginB
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BuLoginAndi
+    Left = 165
+    Height = 25
+    Top = 5
+    Width = 75
+    BorderSpacing.Left = 5
+    Caption = 'Logout'
+    OnClick = BuLogoutClick
+    TabOrder = 2
+  end
+  object Memo1: TMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = SecureButton1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 336
+    Top = 65
+    Width = 429
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 5
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 3
+  end
+  object BuLoginB: TButton
+    AnchorSideLeft.Control = BuLoginAndi
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BuLoginAndi
+    Left = 85
+    Height = 25
+    Top = 5
+    Width = 75
+    BorderSpacing.Left = 5
+    Caption = 'Login B'
+    OnClick = BuLoginBClick
+    TabOrder = 4
+  end
+end

@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_button;
+unit security.controls.SecureBitBtn;
 
 {$mode objfpc}{$H+}
 
@@ -7,13 +7,14 @@ interface
 uses
   StdCtrls,
   Classes,
-  pascalscada.security.control_security_manager;
+  Buttons,
+  security.manager.controls_manager;
 
 type
 
-  { TSecureCustomButton }
+  { TSecureCustomBitBtn }
 
-  TSecureCustomButton = class(TCustomButton, ISecureControlInterface)
+  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -47,7 +48,7 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureButton = class(TSecureCustomButton)
+  TSecureBitBtn = class(TSecureCustomBitBtn)
   published
     property Action;
     property Align;
@@ -60,13 +61,16 @@ type
     property Color;
     property Constraints;
     property Default;
-    property DragCursor;
-    property DragKind;
-    property DragMode;
+    property DefaultCaption;
     property Enabled;
     property Font;
-    property ParentBidiMode;
+    property Glyph;
+    property GlyphShowMode;
+    property Kind;
+    property Layout;
+    property Margin;
     property ModalResult;
+    property NumGlyphs;
     property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
@@ -89,11 +93,13 @@ type
     property OnResize;
     property OnStartDrag;
     property OnUTF8KeyPress;
+    property ParentBidiMode;
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
     property SecurityCode;
     property ShowHint;
+    property Spacing;
     property TabOrder;
     property TabStop;
     property Visible;
@@ -101,46 +107,46 @@ type
 
 implementation
 
-{ TSecureCustomButton }
+{ TSecureCustomBitBtn }
 
-constructor TSecureCustomButton.Create(TheOwner: TComponent);
+constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomButton.Destroy;
+destructor TSecureCustomBitBtn.Destroy;
 begin
-  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomButton.SetSecurityCode(AValue: String);
+procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomButton.GetControlSecurityCode: String;
+function TSecureCustomBitBtn.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomButton.MakeUnsecure;
+procedure TSecureCustomBitBtn.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomButton.CanBeAccessed(a: Boolean);
+procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomButton.SetEnabled(Value: Boolean);
+procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
