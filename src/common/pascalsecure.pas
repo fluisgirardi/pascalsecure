@@ -10,7 +10,7 @@ interface
 uses
   security.exceptions, security.manager.basic_user_management, 
   security.manager.controls_manager, security.manager.custom_user_management, 
-  security.texts, security.manager.schema;
+  security.manager.schema, security.texts;
 
 implementation
 

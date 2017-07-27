@@ -120,6 +120,8 @@ type
     function UsersList:TUserList;
   end;
 
+  TSimpleUserGroupList = specialize TFPGMap<Integer, TSimpleUserGroup>;
+
   {:
   Implements a group where users inherit the group authorizations, adding it
   with user specific authorizations.
@@ -133,23 +135,43 @@ type
     function UsersList:TAuthorizedUserList;
   end;
 
+  TUsrGroupList = specialize TFPGMap<Integer, TUsersGroup>;
 
+  //: Implements the entire user management schema.
   TUsrMgntSchema = class(TObject);
 
+  {:
+  Implements a user level based schema.
+
+  This schema consists in:
+  ** A user list where each user has a access leve.
+  ** Level limits (Min and Max).
+  ** The level that makes a user admin.
+
+  This schema is similar to the security system used in Elipse SCADA
+  and in Wonderware Intouch.
+  }
   TUsrLevelMgntSchema = class(TUsrMgntSchema)
   protected
     FMaxLevel: Integer;
     FMinLevel: Integer;
+    FAdminLevel: Integer;
     FUserList:TUserLevelList;
   public
-    constructor Create(aMinLevel, aMaxLevel:Integer);
+    constructor Create(aMinLevel, aMaxLevel, aAdminLevel:Integer);
     destructor Destroy; override;
     function UserList:TUserLevelList;
   published
+    property AdminLevel:Integer read FAdminLevel;
     property MinLevel:Integer read FMinLevel;
     property MaxLevel:Integer read FMaxLevel;
   end;
 
+  {:
+  Implements a user management that uses authorizations to allow/deny access.
+  This serve as base for TUsrAuthSchema, TGroupAuthSchema and
+  TUsrGroupAuthSchema.
+  }
   TAuthBasedUsrMgntSchema = class(TUsrMgntSchema)
   protected
     FAuthorizations:TAuthorizations;
@@ -159,9 +181,133 @@ type
     function Autorizations:TAuthorizations;
   end;
 
+  {:
+  Implements a user management that uses authorizations to allow/deny access,
+  where each user has a list of allowed authorizations.
+
+  This schema consists in:
+  ** A user list where each user has a list of allowed authorizations.
+  ** A list with all authorizations available on the security manager.
+
+  This schema is similar to the securty system used in Siemens WinCC.
+  }
+  TUsrAuthSchema = class(TAuthBasedUsrMgntSchema)
+  protected
+    FUserList:TAuthorizedUserList;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    function UserList:TAuthorizedUserList;
+  end;
+
+  {:
+  Implements a user management that uses authorizations to allow/deny access,
+  where each user has a list of allowed authorizations and inherits the
+  authorizations assigned to the group which it belongs.
+
+  This schema consists in:
+  ** A list of users, where each user has a list of specific allowed authorizations.
+  ** A list of groups, where each group has a list of allowed authorizations,
+     where the users of each group will inherit the group authorizations.
+  ** A list with all authorizations available on the security manager.
+
+  This schema is similar to the securty system used in Rockwell FactoryTalk.
+  }
+  TUsrGroupAuthSchema = class(TUsrAuthSchema)
+  protected
+    FGroupList:TUsrGroupList;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    function GroupList:TUsrGroupList;
+  end;
+
+  {:
+  Implements a user management that uses authorizations to allow/deny access,
+  where each user inherits the authorizations assigned to the group which it
+  belongs. On this model, users CAN NOT HAVE SPECIFIC PERMISSIONS.
+
+  This schema consists in:
+  ** A list of simple users.
+  ** A list of groups, where each group has a list of allowed authorizations,
+     where the users of each group will inherit the authorizations assigned to
+     the group.
+  ** A list with all authorizations available on the security manager.
+  }
+  TGroupAuthSchema = class(TAuthBasedUsrMgntSchema)
+  protected
+    FUserList:TUserList;
+    FGroupList:TSimpleUserGroupList;
+  public
+    constructor Create; override;
+    destructor Destroy; override;
+    function UserList:TUserList;
+    function GroupList:TSimpleUserGroupList;
+  end;
+
+
+
 implementation
 
 uses security.exceptions;
+
+constructor TGroupAuthSchema.Create;
+begin
+  inherited Create;
+  FUserList:=TUserList.Create;
+  FGroupList:=TSimpleUserGroupList.Create;
+end;
+
+destructor TGroupAuthSchema.Destroy;
+begin
+  FreeAndNil(FGroupList);
+  FreeAndNil(FUserList);
+  inherited Destroy;
+end;
+
+function TGroupAuthSchema.UserList: TUserList;
+begin
+  Result:=FUserList;
+end;
+
+function TGroupAuthSchema.GroupList: TSimpleUserGroupList;
+begin
+  Result:=FGroupList;
+end;
+
+constructor TUsrGroupAuthSchema.Create;
+begin
+  inherited Create;
+  FGroupList:=TUsrGroupList.Create;
+end;
+
+destructor TUsrGroupAuthSchema.Destroy;
+begin
+  FreeAndNil(FGroupList);
+  inherited Destroy;
+end;
+
+function TUsrGroupAuthSchema.GroupList: TUsrGroupList;
+begin
+  Result:=FGroupList;
+end;
+
+constructor TUsrAuthSchema.Create;
+begin
+  inherited Create;
+  FUserList:=TAuthorizedUserList.Create;
+end;
+
+destructor TUsrAuthSchema.Destroy;
+begin
+  FreeAndNil(FUserList);
+  inherited Destroy;
+end;
+
+function TUsrAuthSchema.UserList: TAuthorizedUserList;
+begin
+  Result:=FUserList;
+end;
 
 constructor TAuthBasedUsrMgntSchema.Create;
 begin
@@ -180,10 +326,12 @@ begin
   Result:=FAuthorizations;
 end;
 
-constructor TUsrLevelMgntSchema.Create(aMinLevel, aMaxLevel: Integer);
+constructor TUsrLevelMgntSchema.Create(aMinLevel, aMaxLevel,
+  aAdminLevel: Integer);
 begin
   inherited Create;
   FUserList:=TUserLevelList.Create;
+  FAdminLevel:=aAdminLevel;
   if aMinLevel>=aMaxLevel then
     raise EInvalidLevelRanges.Create(aMinLevel,aMaxLevel);
 end;

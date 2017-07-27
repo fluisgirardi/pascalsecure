@@ -30,12 +30,12 @@
         <UnitName Value="security.manager.custom_user_management"/>
       </Item4>
       <Item5>
-        <Filename Value="security.texts.pas"/>
-        <UnitName Value="security.texts"/>
-      </Item5>
-      <Item6>
         <Filename Value="security.manager.schema.pas"/>
         <UnitName Value="security.manager.schema"/>
+      </Item5>
+      <Item6>
+        <Filename Value="security.texts.pas"/>
+        <UnitName Value="security.texts"/>
       </Item6>
     </Files>
     <i18n>
