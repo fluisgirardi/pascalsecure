@@ -13,6 +13,13 @@ msgstr ""
 msgid "Invalid user manager component"
 msgstr ""
 
+#: security.texts.sinvaliduserschemalevels
+msgid ""
+"Invalid user management range. Maximum value should be greater than minimum value.\n"
+"Minimum=%d\n"
+"Maximum=%d\n"
+msgstr ""
+
 #: security.texts.snouserloggedintoaccessobject
 msgid ""
 "Access denied!\n"
