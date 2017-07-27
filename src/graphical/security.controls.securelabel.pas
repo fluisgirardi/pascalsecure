@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.buttons.secure_bitbtn;
+unit security.controls.SecureLabel;
 
 {$mode objfpc}{$H+}
 
@@ -7,14 +7,13 @@ interface
 uses
   StdCtrls,
   Classes,
-  Buttons,
   pascalscada.security.control_security_manager;
 
 type
 
-  { TSecureCustomBitBtn }
+  { TSecureCustomLabel }
 
-  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
+  TSecureCustomLabel = class(TCustomLabel, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -48,40 +47,42 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureBitBtn = class(TSecureCustomBitBtn)
+  TSecureLabel = class(TSecureCustomLabel)
   published
-    property Action;
     property Align;
+    property Alignment;
     property Anchors;
     property AutoSize;
     property BidiMode;
     property BorderSpacing;
-    property Cancel;
     property Caption;
     property Color;
     property Constraints;
-    property Default;
-    property DefaultCaption;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
     property Enabled;
+    property FocusControl;
     property Font;
-    property Glyph;
-    property GlyphShowMode;
-    property Kind;
     property Layout;
-    property Margin;
-    property ModalResult;
-    property NumGlyphs;
+    property ParentBidiMode;
+    property ParentColor;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property SecurityCode;
+    property ShowAccelChar;
+    property ShowHint;
+    property Transparent;
+    property Visible;
+    property WordWrap;
     property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
+    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDrag;
-    property OnEnter;
-    property OnExit;
-    property OnKeyDown;
-    property OnKeyPress;
-    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -92,24 +93,14 @@ type
     property OnMouseWheelUp;
     property OnResize;
     property OnStartDrag;
-    property OnUTF8KeyPress;
-    property ParentBidiMode;
-    property ParentFont;
-    property ParentShowHint;
-    property PopupMenu;
-    property SecurityCode;
-    property ShowHint;
-    property Spacing;
-    property TabOrder;
-    property TabStop;
-    property Visible;
+    property OptimalFill;
   end;
 
 implementation
 
-{ TSecureCustomBitBtn }
+{ TSecureCustomLabel }
 
-constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
+constructor TSecureCustomLabel.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -118,39 +109,38 @@ begin
   GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomBitBtn.Destroy;
+destructor TSecureCustomLabel.Destroy;
 begin
   GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
+procedure TSecureCustomLabel.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomBitBtn.GetControlSecurityCode: String;
+function TSecureCustomLabel.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomBitBtn.MakeUnsecure;
+procedure TSecureCustomLabel.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
+procedure TSecureCustomLabel.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
+procedure TSecureCustomLabel.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
-

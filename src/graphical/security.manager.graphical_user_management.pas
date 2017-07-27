@@ -19,39 +19,56 @@ type
 
   TFocusedControl = (fcUserName, fcPassword);
 
+  { TCustomFrmLogin }
+
+  TCustomFrmLogin = Class(TCustomForm)
+  private
+    FFocusedControl: TFocusedControl;
+    function GetUserLogin: String; virtual; abstract;
+    function GetUserPassword: String; virtual; abstract;
+    procedure SetUserLogin(AValue: String); virtual; abstract;
+    procedure SetUserPassword(AValue: String); virtual; abstract;
+  public
+    procedure DisableEntry; virtual; abstract;
+    procedure EnableEntry; virtual; abstract;
+    property FocusedControl:TFocusedControl read FFocusedControl write FFocusedControl;
+    property UserLogin:String read GetUserLogin write SetUserLogin;
+    property UserPassword:String read GetUserPassword write SetUserPassword;
+  end;
+
   { TFrmLogin }
 
-  TFrmLogin = Class(TCustomForm)
+  TFrmLogin = Class(TCustomFrmLogin)
   private
     lblLogin,
     lblPassword:TLabel;
     edtLogin,
     edtPassword:TEdit;
     btnButtons:TButtonPanel;
-    FFocusedControl: TFocusedControl;
-    function GetUserLogin: String;
-    function GetUserPassword: String;
-    procedure SetUserLogin(AValue: String);
-    procedure SetUserPassword(AValue: String);
+    function GetUserLogin: String; override;
+    function GetUserPassword: String; override;
+    procedure SetUserLogin(AValue: String); override;
+    procedure SetUserPassword(AValue: String); override;
   protected
     procedure DoShow; override;
   public
     constructor CreateNew(AOwner: TComponent; Num: Integer=0); override;
-    procedure DisableEntry;
-    procedure EnableEntry;
+    procedure DisableEntry; override;
+    procedure EnableEntry; override;
     property FocusedControl:TFocusedControl read FFocusedControl write FFocusedControl;
     property UserLogin:String read GetUserLogin write SetUserLogin;
     property UserPassword:String read GetUserPassword write SetUserPassword;
   end;
 
 
-  { TpSCADABasicGraphicalUserManagement }
 
-  TpSCADABasicGraphicalUserManagement = class(TpSCADABasicUserManagement)
+  { TBasicGraphicalUserManagement }
+
+  TBasicGraphicalUserManagement = class(TBasicUserManagement)
   private
     procedure UnfreezeLogin(Sender: TObject);
   protected
-    frmLogin:TFrmLogin;
+    frmLogin:TCustomFrmLogin;
   public
     function Login: Boolean; override; overload;
     function CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean;
@@ -150,9 +167,9 @@ begin
   btnButtons.Enabled:=false;
 end;
 
-{ TpSCADABasicGraphicalUserManagement }
+{ TBasicGraphicalUserManagement }
 
-procedure TpSCADABasicGraphicalUserManagement.UnfreezeLogin(Sender: TObject);
+procedure TBasicGraphicalUserManagement.UnfreezeLogin(Sender: TObject);
 begin
   if sender is TTimer then begin
     TTimer(sender).Enabled:=false;
@@ -163,7 +180,7 @@ begin
   end;
 end;
 
-function TpSCADABasicGraphicalUserManagement.Login: Boolean;
+function TBasicGraphicalUserManagement.Login: Boolean;
 var
   frozenTimer:TTimer;
   retries:LongInt;
@@ -190,7 +207,7 @@ begin
     frmLogin.UserLogin:='';
     frmLogin.FocusedControl:=fcUserName;
     while (not loggedin) and (not aborted) do begin
-      frmLogin.edtPassword.Text:='';
+      frmLogin.SetUserPassword('');
       if frmLogin.ShowModal=mrOk then begin
         if CheckUserAndPassword(frmLogin.UserLogin, frmLogin.UserPassword, {%H-}aUserID, true) then begin
           FLoggedUser:=true;
@@ -199,7 +216,7 @@ begin
           FCurrentUserLogin:=frmLogin.UserLogin;
           FLoggedSince:=Now;
           Result:=true;
-          GetPascalSCADAControlSecurityManager.UpdateControls;
+          GetControlSecurityManager.UpdateControls;
           DoSuccessfulLogin;
         end else begin
           DoFailureLogin;
@@ -221,7 +238,7 @@ begin
   end;
 end;
 
-function TpSCADABasicGraphicalUserManagement.CheckIfUserIsAllowed(sc: String;
+function TBasicGraphicalUserManagement.CheckIfUserIsAllowed(sc: String;
   RequireUserLogin: Boolean; var userlogin: String): Boolean;
 var
   frozenTimer:TTimer;
