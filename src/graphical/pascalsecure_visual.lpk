@@ -9,13 +9,13 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Description Value="A security system for Lazarus LCL - visual components "/>
     <License Value="LGPL v2.1 with linking exception"/>
     <Version Major="1"/>
-    <Files Count="4">
+    <Files Count="5">
       <Item1>
         <Filename Value="pascalsecure_visual_reg.pas"/>
         <HasRegisterProc Value="True"/>
@@ -33,6 +33,10 @@
         <Filename Value="security.controls.securebitbtn.pas"/>
         <UnitName Value="security.controls.SecureBitBtn"/>
       </Item4>
+      <Item5>
+        <Filename Value="security.controls.tabsheet.pas"/>
+        <UnitName Value="security.controls.tabsheet"/>
+      </Item5>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>

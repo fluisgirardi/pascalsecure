@@ -2,26 +2,30 @@ object Form1: TForm1
   Left = 0
   Height = 401
   Top = 0
-  Width = 429
+  Width = 650
   ActiveControl = SecureButton1
   Caption = 'Form1'
   ClientHeight = 401
-  ClientWidth = 429
+  ClientWidth = 650
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   Visible = False
   object SecureButton1: TSecureButton
-    AnchorSideLeft.Control = BuLoginAndi
+    AnchorSideLeft.Control = BuLogout
+    AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = BuLoginAndi
-    AnchorSideTop.Side = asrBottom
-    Left = 5
+    AnchorSideTop.Side = asrCenter
+    Left = 260
     Height = 25
-    Top = 35
+    Top = 5
     Width = 99
+    BorderSpacing.Left = 20
     Caption = 'SecureButton1'
     OnClick = SecureButton1Click
     SecurityCode = 'autorizacao1'
     TabOrder = 0
+    Visible = False
+    SecureHideOrEnable = True
   end
   object BuLoginAndi: TButton
     AnchorSideLeft.Control = Owner
@@ -50,16 +54,16 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = SecureButton1
+    AnchorSideTop.Control = BuLoginAndi
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 0
-    Height = 336
-    Top = 65
-    Width = 429
+    Height = 366
+    Top = 35
+    Width = 650
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 5
     Lines.Strings = (
@@ -79,5 +83,31 @@ object Form1: TForm1
     Caption = 'Login B'
     OnClick = BuLoginBClick
     TabOrder = 4
+  end
+  object SecureButton2: TSecureButton
+    AnchorSideLeft.Control = SecureButton1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BuLoginAndi
+    AnchorSideTop.Side = asrCenter
+    Left = 379
+    Height = 25
+    Top = 5
+    Width = 99
+    BorderSpacing.Left = 20
+    Caption = 'SecureButton2'
+    OnClick = SecureButton1Click
+    SecurityCode = 'autorizacao1'
+    TabOrder = 5
+    SecureHideOrEnable = False
+  end
+  object UserCustomizedUserManagement1: TUserCustomizedUserManagement
+    LoginRetries = 0
+    LoginFrozenTime = 0
+    OnCheckUserAndPass = CustomizedUserManagement1CheckUserAndPass
+    OnGetUserLogin = CustomizedUserManagement1GetUserLogin
+    OnCanAccess = CustomizedUserManagement1CanAccess
+    OnLogout = UserCustomizedUserManagement1Logout
+    Left = 151
+    Top = 104
   end
 end

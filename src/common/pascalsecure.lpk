@@ -2,6 +2,8 @@
 <CONFIG>
   <Package Version="4">
     <Name Value="pascalsecure"/>
+    <Type Value="RunAndDesignTime"/>
+    <AddToProjectUsesSection Value="True"/>
     <Author Value="Fabio Luis Girardi &lt;fabio@pascalscada.com>"/>
     <CompilerOptions>
       <Version Value="11"/>
@@ -12,7 +14,7 @@
     <Description Value="A security system for Lazarus LCL"/>
     <License Value="LGPL v2.1 with linking exception"/>
     <Version Major="1"/>
-    <Files Count="7">
+    <Files Count="8">
       <Item1>
         <Filename Value="security.exceptions.pas"/>
         <UnitName Value="security.exceptions"/>
@@ -41,7 +43,13 @@
         <Filename Value="security.manager.custom_usrmgnt_interface.pas"/>
         <UnitName Value="security.manager.custom_usrmgnt_interface"/>
       </Item7>
+      <Item8>
+        <Filename Value="pascalsecure_reg.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="pascalsecure_reg"/>
+      </Item8>
     </Files>
+    <LazDoc Paths="fpdoc"/>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="po"/>
@@ -58,5 +66,8 @@
     <PublishOptions>
       <Version Value="2"/>
     </PublishOptions>
+    <CustomOptions Items="ExternHelp" Version="2">
+      <_ExternHelp Items="Count"/>
+    </CustomOptions>
   </Package>
 </CONFIG>

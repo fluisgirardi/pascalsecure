@@ -10,7 +10,7 @@ interface
 uses
   pascalsecure_visual_reg, security.manager.graphical_user_management, 
   security.controls.SecureButton, security.controls.SecureBitBtn, 
-  LazarusPackageIntf;
+  security.controls.tabsheet, LazarusPackageIntf;
 
 implementation
 

@@ -1,26 +1,30 @@
+unit security.controls.tabsheet;
 {
-    This file is part of the Extended Tabsheet
-    Copyright (c) 2016 Andreas Frieß.
-	
+    This file is part of the PascalSECURE Project 2017
+    Copyright (c) Fabio Luis Girardi
+      Parts: (c) Andreas Frieß
+
     See the files COPYING.LGPL and COPYING.modifiedLGPL, 
     included in this distribution.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-	
+
+    It is a standalone part of PascalSCADA 1.0
+       - A multiplatform SCADA framework for Lazarus.
 --------------------------------------------------------------------------------
  Contibutors: 
-    
+
  ******************************************************************************}
-unit security.controls.tabsheet;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, ComCtrls, security.manager.controls_manager;
+  Classes, SysUtils, ComCtrls,
+  security.manager.controls_manager;
 
 
 type
@@ -29,26 +33,35 @@ type
 
    TSecureCustomTabSheet = class(TTabSheet,ISecureControlInterface)
    private
-   protected
      FSecurityCode: String;
      FIsEnabled,
      FIsEnabledBySecurity:Boolean;
      FSecureHide: Boolean;
+   protected
      procedure SetSecureHide(AValue: Boolean);
+     //: @exclude
      procedure SetSecurityCode(AValue: String); virtual;
+     //: @seealso(ISecureControlInterface.GetControlSecurityCode)
      function GetControlSecurityCode: String;
+     //: @seealso(ISecureControlInterface.MakeUnsecure)
      procedure MakeUnsecure;
+     //: @seealso(ISecureControlInterface.CanBeAccessed)
      procedure CanBeAccessed(a: Boolean);
+     //: @exclude
      procedure SetMyVisible(Value: Boolean);
+     //: Control security code. Empty disable the security manager over the control.
+     property SecurityCode:String read FSecurityCode write SetSecurityCode;
+     //: If set the control is hidden, if not the control is disabled
+     property SecureHideOrEnable:Boolean read FSecureHide write SetSecureHide;
    public
      constructor Create(TheOwner: TComponent); override;
      destructor Destroy; override;
-   published
-     property SecurityCode:String read FSecurityCode write SetSecurityCode;
-     property SecureHideOrEnable:Boolean read FSecureHide write SetSecureHide;
    end;
 
    TSecureTabSheet = class(TSecureCustomTabSheet)
+   published
+     property SecurityCode;
+     property SecureHideOrEnable;
    end;
 
    procedure Register;
@@ -62,25 +75,6 @@ end;
 
 { TSecureCustomTabSheet }
 
-procedure TSecureCustomTabSheet.CanBeAccessed(a: Boolean);
-begin
-  FIsEnabledBySecurity := a;
-  SetMyVisible(FIsEnabled);
-end;
-
-procedure TSecureCustomTabSheet.SetMyVisible(Value: Boolean);
-begin
-  FIsEnabled:=Value;
-  if FSecureHide then begin
-    TabVisible := FIsEnabled and FIsEnabledBySecurity;
-    self.Enabled:= True;
-  end
-  else begin
-    TabVisible := True;
-    self.Enabled:= FIsEnabled and FIsEnabledBySecurity;;
-  end;
-end;
-
 constructor TSecureCustomTabSheet.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -88,12 +82,12 @@ begin
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
   FSecureHide:=True;
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
 destructor TSecureCustomTabSheet.Destroy;
 begin
-  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
@@ -118,6 +112,26 @@ begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
+
+procedure TSecureCustomTabSheet.CanBeAccessed(a: Boolean);
+begin
+  FIsEnabledBySecurity := a;
+  SetMyVisible(FIsEnabled);
+end;
+
+procedure TSecureCustomTabSheet.SetMyVisible(Value: Boolean);
+begin
+  FIsEnabled:=Value;
+  if FSecureHide then begin
+    TabVisible := FIsEnabled and FIsEnabledBySecurity;
+    self.Enabled:= True;
+  end
+  else begin
+    TabVisible := True;
+    self.Enabled:= FIsEnabled and FIsEnabledBySecurity;;
+  end;
+end;
+
 
 end.
 
