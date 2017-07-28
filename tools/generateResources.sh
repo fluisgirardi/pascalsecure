@@ -27,7 +27,9 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
     if [ ! -d "../src/$pkgfolder/icons" ] ; then
       mkdir "../src/$pkgfolder/icons";
       ShouldRemoveIconsFolder=1;
-    fi
+    else
+      ShouldCleanIconsFolder=1;
+    fi;
 
     for svgfile in `find ../src/$pkgfolder/scalable -maxdepth 1 -mindepth 1 -type f -iname 't*.svg' -printf '%f\n'`; do
       outfile=`echo $svgfile | cut -d"/" -f3 | cut -d"." -f1`;
@@ -83,12 +85,17 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
   fi
 
   if [ $ShouldRemoveIconsFolder -eq 1 ]; then
-    echo " --> Cleanup...";
-    for svgfile in `find ../src/$pkgfolder/scalable -maxdepth 1 -mindepth 1 -type f -iname 't*.svg' -printf '%f\n'`; do
-      outfile=`echo $svgfile | cut -d"/" -f3 | cut -d"." -f1`;
-      echo " --> Deleting ../src/$pkgfolder/icons/$outfile.png, created from a SVG file.";
-      rm ../src/$pkgfolder/icons/$outfile.png
-    done;
+    echo " --> Removing icons folder...";
+    rm -rf "../src/$pkgfolder/icons";
+  else
+    if [ $ShouldCleanIconsFolder -eq 1 ]; then    
+      echo " --> Icons Cleanup...";
+      for svgfile in `find ../src/$pkgfolder/scalable -maxdepth 1 -mindepth 1 -type f -iname 't*.svg' -printf '%f\n'`; do
+        outfile=`echo $svgfile | cut -d"/" -f3 | cut -d"." -f1`;
+        echo " --> Deleting ../src/$pkgfolder/icons/$outfile.png, created from a SVG file.";
+        rm ../src/$pkgfolder/icons/$outfile.png
+      done;
+    fi
   fi
   echo "";
 done;
