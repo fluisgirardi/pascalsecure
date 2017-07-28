@@ -10,55 +10,66 @@ uses
   security.texts;
 
 type
+  ESecurityException = class(Exception);
 
   { ESecuritySystemAccessDenied }
 
-  ESecuritySystemAccessDenied = class(Exception)
+  ESecuritySystemAccessDenied = class(ESecurityException)
   public
     constructor Create(Token:UTF8String);
   end;
 
   { ESecurityMangerAlreadySet }
 
-  ESecurityMangerAlreadySet = class(Exception)
+  ESecurityMangerAlreadySet = class(ESecurityException)
   public
     constructor Create;
   end;
 
   { ESecurityManagerStillBeingUsed }
 
-  EControlSecurityManagerStillBeingUsed = class(Exception)
+  EControlSecurityManagerStillBeingUsed = class(ESecurityException)
   public
     constructor Create;
   end;
 
   { EInvalidUserManagementComponent }
 
-  EInvalidUserManagementComponent = class(Exception)
+  EInvalidUserManagementComponent = class(ESecurityException)
   public
     constructor Create;
   end;
 
   { EUserManagementIsSet }
 
-  EUserManagementIsSet = class(Exception)
+  EUserManagementIsSet = class(ESecurityException)
   public
     constructor Create;
   end;
 
   { ESecurityCodeIsInUseYet }
 
-  ESecurityCodeIsInUseYet = class(Exception)
+  ESecurityCodeIsInUseYet = class(ESecurityException)
   public
     constructor Create;
   end;
 
-  EInvalidLevelRanges = class(Exception)
+  EInvalidLevelRanges = class(ESecurityException)
   public
     constructor Create(aMinLevel, aMaxLevel:Integer);
   end;
 
+  EUnassignedUsrMgntIntf = class(ESecurityException)
+  public
+    constructor Create;
+  end;
+
 implementation
+
+constructor EUnassignedUsrMgntIntf.Create;
+begin
+  inherited Create(SUnassignedUsrMgntIntf);
+end;
 
 constructor EInvalidLevelRanges.Create(aMinLevel, aMaxLevel: Integer);
 begin

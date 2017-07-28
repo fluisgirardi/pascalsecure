@@ -30,6 +30,12 @@ msgstr ""
 msgid "Security code still being used!"
 msgstr ""
 
+#: security.texts.sunassignedusrmgntintf
+msgid ""
+"Unassigned user management interface!\n"
+"Impossible to display login or user management dialogs.\n"
+msgstr ""
+
 #: security.texts.suserhasnotallowedtoaccessobject
 msgid ""
 "Access denied!\n"

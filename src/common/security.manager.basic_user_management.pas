@@ -5,21 +5,25 @@ unit security.manager.basic_user_management;
 interface
 
 uses
-  Classes, SysUtils, fgl;
+  Classes, SysUtils, fgl, dateutils,
+  security.manager.schema,
+  security.manager.custom_usrmgnt_interface;
 
 type
   TUserChangedEvent = procedure(Sender:TObject; const OldUsername, NewUserName:String) of object;
 
-  TFPGStringList = specialize TFPGList<String>;
+  TFPGStringList = specialize TFPGList<UTF8String>;
 
   { TpSCADABasicUserManagement }
 
   TBasicUserManagement = class(TComponent)
   protected
+    FUsrMgntInterface: TCustomUsrMgntInterface;
     FLoggedUser:Boolean;
     FCurrentUserName,
     FCurrentUserLogin:String;
     FUID:Integer;
+    FRetries:Cardinal;
     FLoggedSince:TDateTime;
     FInactiveTimeOut:Cardinal;
     FLoginRetries:Cardinal;
@@ -45,6 +49,9 @@ type
     function GetCurrentUserName:String; virtual;
     function GetCurrentUserLogin:String; virtual;
 
+    function CanAccess(sc:String; aUID:Integer):Boolean; virtual; abstract; overload;
+    procedure SetUsrMgntInterface(AValue: TCustomUsrMgntInterface);
+
     //read only properties.
     property LoggedSince:TDateTime read GetLoginTime;
 
@@ -57,14 +64,17 @@ type
     property SuccessfulLogin:TNotifyEvent read FSuccessfulLogin write FSuccessfulLogin;
     property FailureLogin:TNotifyEvent read FFailureLogin write FFailureLogin;
     property UserChanged:TUserChangedEvent read FUserChanged write FUserChanged;
-    function CanAccess(sc:String; aUID:Integer):Boolean; virtual; abstract; overload;
+    property UsrMgntInterface:TCustomUsrMgntInterface read FUsrMgntInterface write SetUsrMgntInterface;
   public
     constructor Create(AOwner:TComponent); override;
     destructor  Destroy; override;
-    function    Login:Boolean; virtual; abstract; overload;
+    function    Login:Boolean; virtual; overload;
     function    Login(Userlogin, userpassword: String; var UID: Integer):Boolean; virtual;
     procedure   Logout; virtual;
     procedure   Manage; virtual; abstract;
+
+    function    UsrMgntType:TUsrMgntType; virtual;
+    function    GetUserSchema:TUsrMgntSchema; virtual;
 
     //Security codes management
     procedure   ValidateSecurityCode(sc:String); virtual; abstract;
@@ -75,7 +85,7 @@ type
     function    CanAccess(sc:String):Boolean; virtual; abstract;
     function    GetRegisteredAccessCodes:TFPGStringList; virtual;
 
-    function    CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean; var userlogin: String): Boolean; virtual; abstract;
+    function    CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean; var userlogin: String): Boolean; virtual;
 
     //read only properties.
     property UID:Integer read GetUID;
@@ -117,7 +127,18 @@ begin
   inherited Destroy;
 end;
 
+function TBasicUserManagement.Login: Boolean;
+begin
+  Result:=false;
+  if Assigned(FUsrMgntInterface) then
+    Result:=FUsrMgntInterface.Login
+  else
+    raise EUnassignedUsrMgntIntf.Create;
+end;
+
 function TBasicUserManagement.Login(Userlogin, userpassword: String; var UID:Integer):Boolean; overload;
+var
+  AFreezeStarted: TDateTime;
 begin
   Result:=CheckUserAndPassword(Userlogin, userpassword, UID, true);
   if Result then begin
@@ -126,19 +147,50 @@ begin
     FCurrentUserLogin:=Userlogin;
     FLoggedSince:=Now;
     Result:=true;
+    FRetries:=0;
     GetControlSecurityManager.UpdateControls;
     DoSuccessfulLogin;
+  end else begin
+    FRetries:=FRetries+1;
+    if (FRetries>=FLoginRetries) and (FLoginRetries>0) and (FFrozenTime>0) and Assigned(FUsrMgntInterface) then begin
+
+      if FUsrMgntInterface.LoginVisibleBetweenRetries then
+        FUsrMgntInterface.FreezeUserLogin;
+
+      AFreezeStarted:=Now;
+      repeat
+        CheckSynchronize(1);
+        FUsrMgntInterface.ProcessMessages;
+      until MilliSecondsBetween(Now,AFreezeStarted)>=FFrozenTime;
+
+      if FUsrMgntInterface.LoginVisibleBetweenRetries then
+        FUsrMgntInterface.UnfreezeUserLogin;
+
+      FRetries:=0;
+    end;
   end;
 end;
 
 procedure   TBasicUserManagement.Logout;
 begin
-  FLoggedUser:=false;
-  FCurrentUserName:='';
-  FCurrentUserLogin:='';
-  FUID:=-1;
-  FLoggedSince:=Now;
-  GetControlSecurityManager.UpdateControls;
+  if (not Assigned(FUsrMgntInterface)) or (FUsrMgntInterface.CanLogout) then begin
+    FLoggedUser:=false;
+    FCurrentUserName:='';
+    FCurrentUserLogin:='';
+    FUID:=-1;
+    FLoggedSince:=Now;
+    GetControlSecurityManager.UpdateControls;
+  end;
+end;
+
+function TBasicUserManagement.UsrMgntType: TUsrMgntType;
+begin
+  Result:=umtUnknown;
+end;
+
+function TBasicUserManagement.GetUserSchema: TUsrMgntSchema;
+begin
+  Result:=nil;
 end;
 
 function    TBasicUserManagement.SecurityCodeExists(sc:String):Boolean;
@@ -164,9 +216,45 @@ begin
   Result.Assign(FRegisteredSecurityCodes);
 end;
 
+function TBasicUserManagement.CheckIfUserIsAllowed(sc: String;
+  RequireUserLogin: Boolean; var userlogin: String): Boolean;
+var
+  aLogin, aPass:UTF8String;
+  aUserID: Integer;
+begin
+  //if current user has the authorization, avoid open the dialog that will
+  //asks by other user allowed
+  if UserLogged and CanAccess(sc) and (RequireUserLogin=false) then begin
+    userlogin:=GetCurrentUserLogin;
+    Result:=true;
+    exit;
+  end;
+
+  Result:=false;
+  if Assigned(FUsrMgntInterface) then begin
+    if FUsrMgntInterface.Login(aLogin, aPass) then begin
+      if CheckUserAndPassword(aLogin, aPass, {%H-}aUserID, false) then begin
+        if CanAccess(sc, aUserID) then begin
+          Result:=true;
+          userlogin:=aLogin;
+        end else
+          Result:=false;
+      end;
+    end
+  end else
+    raise EUnassignedUsrMgntIntf.Create;
+end;
+
 function TBasicUserManagement.GetUID: Integer;
 begin
   Result:=FUID;
+end;
+
+procedure TBasicUserManagement.SetUsrMgntInterface(
+  AValue: TCustomUsrMgntInterface);
+begin
+  if FUsrMgntInterface=AValue then Exit;
+  FUsrMgntInterface:=AValue;
 end;
 
 function    TBasicUserManagement.GetLoginTime:TDateTime;
