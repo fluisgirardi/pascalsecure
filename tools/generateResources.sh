@@ -42,7 +42,7 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
 
   echo -n "Looking for PNG ICONS      in src/$pkgfolder: ";
   if [ -d "../src/$pkgfolder/icons" ] ; then
-    echo "FOUND! Starting the Lazarus Resource file (.lrs) creation procedure...";
+    echo "FOUND! Starting the Lazarus Resource file (.res) creation procedure...";
     if [ ! -d "../src/$pkgfolder/.tmp" ] ; then
       mkdir "../src/$pkgfolder/.tmp";
     fi;
@@ -59,18 +59,18 @@ for pkgfolder in `find ../src/ -maxdepth 1 -mindepth 1 -type d -printf '%f\n'`; 
     fi
 
     linha="";
-    CreateLRS=0;
+    CreateRES=0;
     for l in `find ../src/$pkgfolder/.tmp -maxdepth 1 -mindepth 1 -type f -iname "t*.png"`; do
-      CreateLRS=1;
+      CreateRES=1;
       linha="$linha $l";
       echo " --> found file $l";
     done;
     
-    if [ $CreateLRS -eq 1 ]; then
-      if [ -f "../src/$pkgfolder/$pkgfolder.lrs" ]; then
-        echo " --> Updating LRS file in src/$pkgfolder/$pkgfolder.lrs"        
+    if [ $CreateRES -eq 1 ]; then
+      if [ -f "../src/$pkgfolder/$pkgfolder.res" ]; then
+        echo " --> Updating RES file in src/$pkgfolder/$pkgfolder.res"        
       else
-        echo " --> Creating LRS file in src/$pkgfolder/$pkgfolder.lrs"
+        echo " --> Creating RES file in src/$pkgfolder/$pkgfolder.res"
       fi
       ./lazres/lazres ../src/$pkgfolder/$pkgfolder.res $linha > /dev/null
     else
