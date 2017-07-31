@@ -66,6 +66,8 @@ type
   //: Implements a list of simple users
   TUserList = specialize TFPGMap<Integer, TCustomUser>;
 
+  TSimpleUser = class(TCustomUser);
+
   //: Implements a user with access level.
   TUserWithLevelAccess = class(TCustomUser)
   protected
@@ -100,14 +102,24 @@ type
 
   //: Implements a simple usergroup with group-authorizations
   TCustomGroup = class(TObject)
+  private
+    function GetUser(aIndex: Integer): TCustomUser;
+    function GetUserByUID(aUID: Integer): TCustomUser;
+    function GetUserCount: Integer;
   protected
     FGroupID: Integer;
     FGroupName: UTF8String;
     FAuthorizations:TAuthorizationList;
+    FUserList:TUserList;
+    function AddCustomUser(const aUser:TCustomUser):Boolean; virtual;
   public
     constructor Create(aGID:Integer; aGroupName:UTF8String); virtual;
-    destructor Destroy; override;
-    function GroupAuthorizations:TAuthorizationList;
+    destructor  Destroy; override;
+    function    GroupAuthorizations:TAuthorizationList;
+
+    property UserCount:Integer read GetUserCount;
+    property User[Index:Integer]:TCustomUser read GetUser;
+    property UserByUID[UID:Integer]:TCustomUser read GetUserByUID;
   published
     property GroupID:Integer read FGroupID;
     property GroupName:UTF8String read FGroupName;
@@ -118,12 +130,8 @@ type
   specific authorizations.
   }
   TSimpleUserGroup = class(TCustomGroup)
-  protected
-    FUserList:TUserList;
   public
-    constructor Create(aGID: Integer; aGroupName: UTF8String); override;
-    destructor Destroy; override;
-    function UsersList:TUserList;
+    function AddUser(const aUser: TSimpleUser): Boolean;
   end;
 
   TSimpleUserGroupList = specialize TFPGMap<Integer, TSimpleUserGroup>;
@@ -133,12 +141,8 @@ type
   with user specific authorizations.
   }
   TUsersGroup = class(TCustomGroup)
-  protected
-    FUserList:TAuthorizedUserList;
   public
-    constructor Create(aGID: Integer; aGroupName: UTF8String); override;
-    destructor Destroy; override;
-    function UsersList:TAuthorizedUserList;
+    function AddUser(const aUser: TAuthorizedUser): Boolean;
   end;
 
   TUsrGroupList = specialize TFPGMap<Integer, TUsersGroup>;
@@ -162,11 +166,9 @@ type
     FMaxLevel: Integer;
     FMinLevel: Integer;
     FAdminLevel: Integer;
-    FUserList:TUserLevelList;
   public
     constructor Create(aMinLevel, aMaxLevel, aAdminLevel:Integer);
     destructor Destroy; override;
-    function UserList:TUserLevelList;
   published
     property AdminLevel:Integer read FAdminLevel;
     property MinLevel:Integer read FMinLevel;
@@ -257,6 +259,16 @@ implementation
 
 uses security.exceptions;
 
+function TUsersGroup.AddUser(const aUser: TAuthorizedUser): Boolean;
+begin
+  Result:=AddCustomUser(aUser);
+end;
+
+function TSimpleUserGroup.AddUser(const aUser: TSimpleUser): Boolean;
+begin
+  Result:=AddCustomUser(aUser);
+end;
+
 constructor TGroupAuthSchema.Create;
 begin
   inherited Create;
@@ -336,7 +348,6 @@ constructor TUsrLevelMgntSchema.Create(aMinLevel, aMaxLevel,
   aAdminLevel: Integer);
 begin
   inherited Create;
-  FUserList:=TUserLevelList.Create;
   FAdminLevel:=aAdminLevel;
   if aMinLevel>=aMaxLevel then
     raise EInvalidLevelRanges.Create(aMinLevel,aMaxLevel);
@@ -344,58 +355,57 @@ end;
 
 destructor TUsrLevelMgntSchema.Destroy;
 begin
-  FreeAndNil(FUserList);
   inherited Destroy;
 end;
 
-function TUsrLevelMgntSchema.UserList: TUserLevelList;
+
+function TCustomGroup.GetUser(aIndex: Integer): TCustomUser;
 begin
-  Result:=FUserList;
+  Result:=nil;
+  if assigned(FUserList) and (aIndex<FUserList.Count) then
+    result := FUserList.KeyData[FUserList.Keys[aIndex]];
 end;
 
-{ TUsersGroup }
-
-constructor TUsersGroup.Create(aGID: Integer; aGroupName: UTF8String);
+function TCustomGroup.GetUserByUID(aUID: Integer): TCustomUser;
+var
+  aKeyIdx: Integer;
 begin
-  inherited Create(aGID, aGroupName);
-  FUserList:=TAuthorizedUserList.Create;
+  Result:=nil;
+  if assigned(FUserList) and FUserList.Find(aUID, aKeyIdx) then
+    Result := FUserList.KeyData[FUserList.Keys[aUID]];
 end;
 
-destructor TUsersGroup.Destroy;
+function TCustomGroup.GetUserCount: Integer;
 begin
-  FreeAndNil(FUserList);
-  inherited Destroy;
+  Result:=FUserList.Count;
 end;
 
-function TUsersGroup.UsersList: TAuthorizedUserList;
+function TCustomGroup.AddCustomUser(const aUser: TCustomUser): Boolean;
+var
+  InsertAtIdx, i: Integer;
 begin
-  Result:=FUserList;
+  Result:=false;
+  if Assigned(FUserList) and Assigned(aUser) then begin
+    InsertAtIdx:=-1;
+    for i:=0 to FUserList.Count-1 do
+      if FUserList.Keys[i]<aUser.UID then begin
+        InsertAtIdx:=i;
+        break;
+      end;
+    if InsertAtIdx=-1 then begin
+      FUserList.Add(aUser.UID, aUser);
+      Result:=true;
+    end else begin
+      FUserList.InsertKeyData(InsertAtIdx, aUser.UID, aUser);
+      Result:=true;
+    end;
+  end;
 end;
-
-{ TSimpleUsersGroup }
-
-constructor TSimpleUserGroup.Create(aGID: Integer; aGroupName: UTF8String);
-begin
-  inherited Create(aGID, aGroupName);
-  FUserList:=TUserList.Create;
-end;
-
-destructor TSimpleUserGroup.Destroy;
-begin
-  FreeAndNil(FUserList);
-  inherited Destroy;
-end;
-
-function TSimpleUserGroup.UsersList: TUserList;
-begin
-  Result:=FUserList;
-end;
-
-{ TCustomGroup }
 
 constructor TCustomGroup.Create(aGID: Integer; aGroupName: UTF8String);
 begin
   inherited Create;
+  FUserList:=TUserList.Create;
   FAuthorizations:=TAuthorizationList.Create;
   FGroupID:=aGID;
   FGroupName:=aGroupName;
@@ -403,6 +413,7 @@ end;
 
 destructor TCustomGroup.Destroy;
 begin
+  FreeAndNil(FUserList);
   FreeAndNil(FAuthorizations);
   inherited Destroy;
 end;

@@ -14,9 +14,12 @@ type
 
   TFPGStringList = specialize TFPGList<UTF8String>;
 
-  { TpSCADABasicUserManagement }
-
   TBasicUserManagement = class(TComponent)
+  protected
+    //: Return the user management type.
+    function    UsrMgntType:TUsrMgntType; virtual;
+    //: Return the user management schema (all users, groups and authorizations, if availables).
+    function    GetUserSchema:TUsrMgntSchema; virtual;
   protected
     FUsrMgntInterface: TCustomUsrMgntInterface;
     FLoggedUser:Boolean;
@@ -68,13 +71,14 @@ type
   public
     constructor Create(AOwner:TComponent); override;
     destructor  Destroy; override;
+    //: Opens the Login interface of UsrMgntInterface.Login
     function    Login:Boolean; virtual; overload;
+    //: Try Login on the system
     function    Login(Userlogin, userpassword: String; var UID: Integer):Boolean; virtual;
+    //: Logout
     procedure   Logout; virtual;
-    procedure   Manage; virtual; abstract;
-
-    function    UsrMgntType:TUsrMgntType; virtual;
-    function    GetUserSchema:TUsrMgntSchema; virtual;
+    //: Opens the user management defined in UsrMgntInterface.UserManagement.
+    procedure   Manage; virtual;
 
     //Security codes management
     procedure   ValidateSecurityCode(sc:String); virtual; abstract;
@@ -181,6 +185,15 @@ begin
     FLoggedSince:=Now;
     GetControlSecurityManager.UpdateControls;
   end;
+end;
+
+procedure TBasicUserManagement.Manage;
+begin
+  //Result:=false;
+  //if Assigned(FUsrMgntInterface) then
+  //  Result:=FUsrMgntInterface.UserManagement(GetUserSchema);
+  //else
+  //  raise EUnassignedUsrMgntIntf.Create;
 end;
 
 function TBasicUserManagement.UsrMgntType: TUsrMgntType;
