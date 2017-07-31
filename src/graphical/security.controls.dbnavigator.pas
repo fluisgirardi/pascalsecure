@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.dbctrls.secure_dbnavigator;
+unit security.controls.dbnavigator;
 
 {$mode objfpc}{$H+}
 

@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.maskedit.secure_maskedit;
+unit security.controls.maskedit;
 
 {$mode objfpc}{$H+}
 

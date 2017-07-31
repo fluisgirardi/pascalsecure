@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.comctrls.secure_progressbar;
+unit security.controls.progressbar;
 
 {$mode objfpc}{$H+}
 

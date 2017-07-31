@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_scrollbar;
+unit security.controls.scrollbar;
 
 {$mode objfpc}{$H+}
 

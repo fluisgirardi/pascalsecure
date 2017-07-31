@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_radiobutton;
+unit security.controls.radiobutton;
 
 {$mode objfpc}{$H+}
 

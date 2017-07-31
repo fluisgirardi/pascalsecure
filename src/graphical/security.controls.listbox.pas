@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_listbox;
+unit security.controls.listbox;
 
 {$mode objfpc}{$H+}
 

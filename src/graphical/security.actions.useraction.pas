@@ -1,18 +1,19 @@
-unit pascalscada.secure_actions.secure_action;
+unit security.actions.useraction;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, pascalscada.security.control_security_manager,
-  pascalscada.secure_actions.authorized_by_user_management_action;
+  Classes, SysUtils,
+  security.manager.controls_manager,
+  security.actions.authorized_by_user_management;
 
 type
 
-  { TpSCADASecureAction }
+  { TSecureAction }
 
-  TpSCADASecureAction = class(TpSCADAAuthorizedByUserManagementAction)
+  TSecureAction = class(TAuthByUserMgntAction)
   protected
     procedure SetSecurityCode(sc:String);
   public
@@ -30,16 +31,16 @@ type
 
 implementation
 
-uses pascalscada.secure_actions.texts;
+uses security.texts;
 
-{ TpSCADASecureAction }
+{ TSecureAction }
 
-procedure TpSCADASecureAction.SetSecurityCode(sc: String);
+procedure TSecureAction.SetSecurityCode(sc: String);
 begin
   if Trim(sc)='' then
     Self.CanBeAccessed(true)
   else
-    with GetPascalSCADAControlSecurityManager do begin
+    with GetControlSecurityManager do begin
       ValidateSecurityCode(sc);
       if not SecurityCodeExists(sc) then
         RegisterSecurityCode(sc);
@@ -50,15 +51,15 @@ begin
   FSecurityCode:=sc;
 end;
 
-procedure TpSCADASecureAction.UpdateTarget(Target: TObject);
+procedure TSecureAction.UpdateTarget(Target: TObject);
 begin
   CanBeAccessed(FAccessAllowed);
   inherited UpdateTarget(Target);
 end;
 
-function TpSCADASecureAction.Execute: Boolean;
+function TSecureAction.Execute: Boolean;
 begin
-  if GetPascalSCADAControlSecurityManager.CanAccess(FSecurityCode) then
+  if GetControlSecurityManager.CanAccess(FSecurityCode) then
     Result:=inherited Execute
   else begin
     Result:=false;

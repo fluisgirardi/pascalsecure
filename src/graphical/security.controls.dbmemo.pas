@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.dbctrls.secure_dbmemo;
+unit security.controls.dbmemo;
 
 {$mode objfpc}{$H+}
 

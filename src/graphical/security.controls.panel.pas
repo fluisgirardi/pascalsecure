@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.extctrls.secure_panel;
+unit security.controls.panel;
 
 {$mode objfpc}{$H+}
 

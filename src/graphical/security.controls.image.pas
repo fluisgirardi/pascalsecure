@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.extctrls.secure_image;
+unit security.controls.image;
 
 {$mode objfpc}{$H+}
 
