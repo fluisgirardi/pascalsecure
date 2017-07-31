@@ -28,7 +28,7 @@ uses
   LazIDEIntf,
   security.controls.SecureBitBtn,
   security.controls.SecureButton,
-  security.controls.tabsheet;
+  security.controls.SecureTabsheet;
 
 ResourceString
   SPascalSecurePalette = 'PascalSecure_Controls';

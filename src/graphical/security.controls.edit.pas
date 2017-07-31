@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_edit;
+unit security.controls.edit;
 
 {$mode objfpc}{$H+}
 

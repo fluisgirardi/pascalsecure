@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_label;
+unit security.controls.bitbtn;
 
 {$mode objfpc}{$H+}
 
@@ -7,13 +7,14 @@ interface
 uses
   StdCtrls,
   Classes,
-  pascalscada.security.control_security_manager;
+  Buttons,
+  security.manager.controls_manager;
 
 type
 
-  { TSecureCustomLabel }
+  { TSecureCustomBitBtn }
 
-  TSecureCustomLabel = class(TCustomLabel, ISecureControlInterface)
+  TSecureCustomBitBtn = class(TCustomBitBtn, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -47,42 +48,40 @@ type
     destructor Destroy; override;
   end;
 
-  TSecureLabel = class(TSecureCustomLabel)
+  TSecureBitBtn = class(TSecureCustomBitBtn)
   published
+    property Action;
     property Align;
-    property Alignment;
     property Anchors;
     property AutoSize;
     property BidiMode;
     property BorderSpacing;
+    property Cancel;
     property Caption;
     property Color;
     property Constraints;
-    property DragCursor;
-    property DragKind;
-    property DragMode;
+    property Default;
+    property DefaultCaption;
     property Enabled;
-    property FocusControl;
     property Font;
+    property Glyph;
+    property GlyphShowMode;
+    property Kind;
     property Layout;
-    property ParentBidiMode;
-    property ParentColor;
-    property ParentFont;
-    property ParentShowHint;
-    property PopupMenu;
-    property SecurityCode;
-    property ShowAccelChar;
-    property ShowHint;
-    property Transparent;
-    property Visible;
-    property WordWrap;
+    property Margin;
+    property ModalResult;
+    property NumGlyphs;
     property OnChangeBounds;
     property OnClick;
     property OnContextPopup;
-    property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDrag;
+    property OnEnter;
+    property OnExit;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
@@ -93,54 +92,65 @@ type
     property OnMouseWheelUp;
     property OnResize;
     property OnStartDrag;
-    property OptimalFill;
+    property OnUTF8KeyPress;
+    property ParentBidiMode;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property SecurityCode;
+    property ShowHint;
+    property Spacing;
+    property TabOrder;
+    property TabStop;
+    property Visible;
   end;
 
 implementation
 
-{ TSecureCustomLabel }
+{ TSecureCustomBitBtn }
 
-constructor TSecureCustomLabel.Create(TheOwner: TComponent);
+constructor TSecureCustomBitBtn.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TSecureCustomLabel.Destroy;
+destructor TSecureCustomBitBtn.Destroy;
 begin
-  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TSecureCustomLabel.SetSecurityCode(AValue: String);
+procedure TSecureCustomBitBtn.SetSecurityCode(AValue: String);
 begin
   SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface));
 end;
 
-function TSecureCustomLabel.GetControlSecurityCode: String;
+function TSecureCustomBitBtn.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TSecureCustomLabel.MakeUnsecure;
+procedure TSecureCustomBitBtn.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TSecureCustomLabel.CanBeAccessed(a: Boolean);
+procedure TSecureCustomBitBtn.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TSecureCustomLabel.SetEnabled(Value: Boolean);
+procedure TSecureCustomBitBtn.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
 end.
+

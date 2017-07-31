@@ -1,19 +1,20 @@
-unit pascalscada.secure_actions.logout_action;
+unit security.actions.logout;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, pascalscada.security.control_security_manager,
-  pascalscada.security.basic_user_management,
-  pascalscada.secure_actions.authorized_by_user_management_action;
+  Classes, SysUtils,
+  security.manager.controls_manager,
+  security.actions.authorized_by_user_management,
+  security.manager.basic_user_management;
 
 type
 
-  { TpSCADALogoutAction }
+  { TLogoutAction }
 
-  TpSCADALogoutAction = class(TpSCADAAuthorizedByUserManagementAction)
+  TLogoutAction = class(TAuthByUserMgntAction)
   protected
     procedure CanBeAccessed({%H-}a: Boolean); override;
   public
@@ -23,23 +24,23 @@ type
 
 implementation
 
-{ TpSCADALogoutAction }
+{ TLogoutAction }
 
-procedure TpSCADALogoutAction.CanBeAccessed(a: Boolean);
+procedure TLogoutAction.CanBeAccessed(a: Boolean);
 begin
-  if GetPascalSCADAControlSecurityManager.UserManagement<>nil then
-    with GetPascalSCADAControlSecurityManager.UserManagement as TpSCADABasicUserManagement do
+  if GetControlSecurityManager.UserManagement<>nil then
+    with GetControlSecurityManager.UserManagement as TBasicUserManagement do
       inherited CanBeAccessed(not UserLogged);
 end;
 
-procedure TpSCADALogoutAction.UpdateTarget(Target: TObject);
+procedure TLogoutAction.UpdateTarget(Target: TObject);
 begin
   CanBeAccessed(true);
 end;
 
-procedure TpSCADALogoutAction.ExecuteTarget(Target: TObject);
+procedure TLogoutAction.ExecuteTarget(Target: TObject);
 begin
-  GetPascalSCADAControlSecurityManager.Logout;
+  GetControlSecurityManager.Logout;
 end;
 
 end.

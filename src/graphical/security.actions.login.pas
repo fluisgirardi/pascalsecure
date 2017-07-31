@@ -1,19 +1,20 @@
-unit pascalscada.secure_actions.login_action;
+unit security.actions.login;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, pascalscada.security.control_security_manager,
-  pascalscada.security.basic_user_management,
-  pascalscada.secure_actions.authorized_by_user_management_action;
+  Classes, SysUtils,
+  security.manager.controls_manager,
+  security.manager.basic_user_management,
+  security.actions.authorized_by_user_management;
 
 type
 
   { TpSCADALoginAction }
 
-  TpSCADALoginAction = class(TpSCADAAuthorizedByUserManagementAction)
+  TLoginAction = class(TAuthByUserMgntAction)
   protected
     procedure CanBeAccessed({%H-}a: Boolean); override;
   public
@@ -23,23 +24,23 @@ type
 
 implementation
 
-{ TpSCADALoginAction }
+{ TLoginAction }
 
-procedure TpSCADALoginAction.CanBeAccessed(a: Boolean);
+procedure TLoginAction.CanBeAccessed(a: Boolean);
 begin
-  if GetPascalSCADAControlSecurityManager.UserManagement<>nil then
-    with GetPascalSCADAControlSecurityManager.UserManagement as TpSCADABasicUserManagement do
+  if GetControlSecurityManager.UserManagement<>nil then
+    with GetControlSecurityManager.UserManagement as TBasicUserManagement do
       inherited CanBeAccessed(not UserLogged);
 end;
 
-procedure TpSCADALoginAction.UpdateTarget(Target: TObject);
+procedure TLoginAction.UpdateTarget(Target: TObject);
 begin
   CanBeAccessed(true);
 end;
 
-procedure TpSCADALoginAction.ExecuteTarget(Target: TObject);
+procedure TLoginAction.ExecuteTarget(Target: TObject);
 begin
-  GetPascalSCADAControlSecurityManager.Login;
+  GetControlSecurityManager.Login;
 end;
 
 end.

@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_togglebox;
+unit security.controls.togglebox;
 
 {$mode objfpc}{$H+}
 

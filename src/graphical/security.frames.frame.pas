@@ -1,4 +1,4 @@
-unit pascalscada.secure_frame.frame.secure_frame;
+unit security.frames.frame;
 
 {$mode objfpc}{$H+}
 

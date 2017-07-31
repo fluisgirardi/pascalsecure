@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_custom_checkbox;
+unit security.controls.custom_checkbox;
 
 {$mode objfpc}{$H+}
 

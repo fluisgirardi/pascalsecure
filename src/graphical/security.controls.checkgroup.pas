@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.extctrls.secure_checkgroup;
+unit security.controls.checkgroup;
 
 {$mode objfpc}{$H+}
 

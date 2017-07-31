@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_memo;
+unit security.controls.memo;
 
 {$mode objfpc}{$H+}
 

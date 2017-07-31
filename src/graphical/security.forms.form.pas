@@ -1,4 +1,4 @@
-unit pascalscada.secure_forms.forms.secure_form;
+unit security.forms.form;
 
 {$mode objfpc}{$H+}
 

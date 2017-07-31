@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.buttons.secure_speedbutton;
+unit security.controls.speedbutton;
 
 {$mode objfpc}{$H+}
 

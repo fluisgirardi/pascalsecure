@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.extctrls.secure_radiogroup;
+unit security.controls.radiogroup;
 
 {$mode objfpc}{$H+}
 
