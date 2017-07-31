@@ -9,8 +9,8 @@ uses
   FormEditingIntf,
   ProjectIntf,
   LazIDEIntf,
-  security.controls.SecureBitBtn,
-  security.controls.SecureButton;
+  security.controls.bitbtn,
+  security.controls.button;
 
 
 procedure Register;
@@ -21,7 +21,7 @@ implementation
 procedure Register;
 begin
   RegisterComponents('PascalSecure_Controls', [TSecureButton,
-                                             TSecureBitBtn]);
+                                               TSecureBitBtn]);
 
 end;
 

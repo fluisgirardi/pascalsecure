@@ -5,13 +5,14 @@ unit security.actions.authorized_by_user_management;
 interface
 
 uses
-  ActnList, Classes, SysUtils, pascalscada.security.control_security_manager;
+  ActnList, Classes, SysUtils,
+  security.manager.controls_manager;
 
 type
 
-  { TpSCADAAuthorizedByUserManagementAction }
+  { TAuthByUserMgntAction }
 
-  TpSCADAAuthorizedByUserManagementAction = class(TCustomAction, ISecureControlInterface)
+  TAuthByUserMgntAction = class(TCustomAction, ISecureControlInterface)
   private
     FDisableIfNotAuthorized: Boolean;
     procedure SetDisableIfNotAuthorized(AValue: Boolean);
@@ -52,56 +53,56 @@ type
 
 implementation
 
-{ TpSCADAAuthorizedByUserManagementAction }
+{ TAuthByUserMgntAction }
 
-constructor TpSCADAAuthorizedByUserManagementAction.Create(AOwner: TComponent);
+constructor TAuthByUserMgntAction.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FEnabled:=true;
   FDisableIfNotAuthorized:=false;
   DisableIfNoHandler:=False;
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self);
+  GetControlSecurityManager.RegisterControl(Self);
 end;
 
-destructor TpSCADAAuthorizedByUserManagementAction.Destroy;
+destructor TAuthByUserMgntAction.Destroy;
 begin
-  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self);
+  GetControlSecurityManager.UnRegisterControl(Self);
   inherited Destroy;
 end;
 
-procedure TpSCADAAuthorizedByUserManagementAction.SetDisableIfNotAuthorized(
+procedure TAuthByUserMgntAction.SetDisableIfNotAuthorized(
   AValue: Boolean);
 begin
   if FDisableIfNotAuthorized=AValue then Exit;
   FDisableIfNotAuthorized:=AValue;
-  CanBeAccessed(GetPascalSCADAControlSecurityManager.CanAccess(FSecurityCode));
+  CanBeAccessed(GetControlSecurityManager.CanAccess(FSecurityCode));
 end;
 
-procedure TpSCADAAuthorizedByUserManagementAction.SetEnabled(AValue: Boolean);
+procedure TAuthByUserMgntAction.SetEnabled(AValue: Boolean);
 begin
   if FEnabled=AValue then Exit;
   FEnabled:=AValue;
   inherited Enabled:=FEnabled and FAccessAllowed;
 end;
 
-function TpSCADAAuthorizedByUserManagementAction.GetControlSecurityCode: String;
+function TAuthByUserMgntAction.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TpSCADAAuthorizedByUserManagementAction.MakeUnsecure;
+procedure TAuthByUserMgntAction.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TpSCADAAuthorizedByUserManagementAction.CanBeAccessed(a: Boolean);
+procedure TAuthByUserMgntAction.CanBeAccessed(a: Boolean);
 begin
   FAccessAllowed:=a or (FDisableIfNotAuthorized=false);
   inherited Enabled:=FEnabled and FAccessAllowed;
 end;
 
-function TpSCADAAuthorizedByUserManagementAction.HandlesTarget(Target: TObject
+function TAuthByUserMgntAction.HandlesTarget(Target: TObject
   ): Boolean;
 begin
   inherited HandlesTarget(Target);

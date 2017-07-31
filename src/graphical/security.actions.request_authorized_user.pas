@@ -5,13 +5,14 @@ unit security.actions.request_authorized_user;
 interface
 
 uses
-  ActnList, Classes, SysUtils, pascalscada.security.control_security_manager;
+  ActnList, Classes, SysUtils,
+  security.manager.controls_manager;
 
 type
 
-  { TpSCADARequestAuthorizedUserAction }
+  { TRequestAuthorizedUserAction }
 
-  TpSCADARequestAuthorizedUserAction = class(TAction)
+  TRequestAuthorizedUserAction = class(TAction)
   private
     FAuthorizedBy: String;
     FRequireLoginAlways: Boolean;
@@ -28,14 +29,14 @@ type
 
 implementation
 
-{ TpSCADARequestAuthorizedUserAction }
+{ TRequestAuthorizedUserAction }
 
-procedure TpSCADARequestAuthorizedUserAction.SetSecurityCode(AValue: String);
+procedure TRequestAuthorizedUserAction.SetSecurityCode(AValue: String);
 begin
   if FSecurityCode=AValue then Exit;
 
   if Trim(AValue)<>'' then
-    with GetPascalSCADAControlSecurityManager do begin
+    with GetControlSecurityManager do begin
       ValidateSecurityCode(AValue);
       if not SecurityCodeExists(AValue) then
         RegisterSecurityCode(AValue);
@@ -44,15 +45,15 @@ begin
   FSecurityCode:=AValue;
 end;
 
-function TpSCADARequestAuthorizedUserAction.Execute: Boolean;
+function TRequestAuthorizedUserAction.Execute: Boolean;
 begin
-  if GetPascalSCADAControlSecurityManager.CheckIfUserIsAllowed(FSecurityCode, FRequireLoginAlways, FAuthorizedBy) then
+  if GetControlSecurityManager.CheckIfUserIsAllowed(FSecurityCode, FRequireLoginAlways, FAuthorizedBy) then
     Result:=inherited Execute
   else
     Result:=false;
 end;
 
-function TpSCADARequestAuthorizedUserAction.HandlesTarget(Target: TObject): Boolean;
+function TRequestAuthorizedUserAction.HandlesTarget(Target: TObject): Boolean;
 begin
   inherited HandlesTarget(Target);
   Result:=true;

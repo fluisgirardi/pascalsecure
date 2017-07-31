@@ -5,15 +5,16 @@ unit security.actions.manage;
 interface
 
 uses
-  Classes, SysUtils, pascalscada.security.control_security_manager,
-  pascalscada.security.basic_user_management,
-  pascalscada.secure_actions.authorized_by_user_management_action;
+  Classes, SysUtils,
+  security.manager.controls_manager,
+  security.actions.authorized_by_user_management,
+  security.manager.basic_user_management;
 
 type
 
-  { TpSCADAManageUsersAndGroupsAction }
+  { TManageUsersAndGroupsAction }
 
-  TpSCADAManageUsersAndGroupsAction = class(TpSCADAAuthorizedByUserManagementAction)
+  TManageUsersAndGroupsAction = class(TAuthByUserMgntAction)
   protected
     procedure CanBeAccessed({%H-}a: Boolean); override;
   public
@@ -23,23 +24,23 @@ type
 
 implementation
 
-{ TpSCADAManageUsersAndGroupsAction }
+{ TManageUsersAndGroupsAction }
 
-procedure TpSCADAManageUsersAndGroupsAction.CanBeAccessed(a: Boolean);
+procedure TManageUsersAndGroupsAction.CanBeAccessed(a: Boolean);
 begin
-  if GetPascalSCADAControlSecurityManager.UserManagement<>nil then
-    with GetPascalSCADAControlSecurityManager.UserManagement as TpSCADABasicUserManagement do
+  if GetControlSecurityManager.UserManagement<>nil then
+    with GetControlSecurityManager.UserManagement as TBasicUserManagement do
       inherited CanBeAccessed(UserLogged);
 end;
 
-procedure TpSCADAManageUsersAndGroupsAction.UpdateTarget(Target: TObject);
+procedure TManageUsersAndGroupsAction.UpdateTarget(Target: TObject);
 begin
   CanBeAccessed(true);
 end;
 
-procedure TpSCADAManageUsersAndGroupsAction.ExecuteTarget(Target: TObject);
+procedure TManageUsersAndGroupsAction.ExecuteTarget(Target: TObject);
 begin
-  GetPascalSCADAControlSecurityManager.Manage;
+  GetControlSecurityManager.Manage;
 end;
 
 end.
