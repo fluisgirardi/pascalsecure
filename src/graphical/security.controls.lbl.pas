@@ -1,4 +1,4 @@
-unit security.controls.SecureLabel;
+unit security.controls.lbl;
 
 {$mode objfpc}{$H+}
 

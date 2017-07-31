@@ -1,4 +1,4 @@
-unit pascalscada.secure_actions.logout_action;
+unit security.actions.logout;
 
 {$mode objfpc}{$H+}
 

@@ -1,4 +1,4 @@
-unit pascalscada.secure_actions.manage_users_and_groups_action;
+unit security.actions.manage;
 
 {$mode objfpc}{$H+}
 

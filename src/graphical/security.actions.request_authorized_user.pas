@@ -1,4 +1,4 @@
-unit pascalscada.secure_actions.request_authorized_user;
+unit security.actions.request_authorized_user;
 
 {$mode objfpc}{$H+}
 
