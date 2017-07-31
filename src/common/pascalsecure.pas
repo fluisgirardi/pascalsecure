@@ -11,9 +11,7 @@ uses
   security.exceptions, security.manager.basic_user_management, 
   security.manager.controls_manager, security.manager.custom_user_management, 
   security.manager.custom_usrmgnt_interface, security.manager.schema, 
-  security.manager.schema, security.texts, 
-  pascalsecure_reg, 
-  LazarusPackageIntf;
+  security.texts, pascalsecure_reg, LazarusPackageIntf;
 
 implementation
 
