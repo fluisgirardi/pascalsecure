@@ -1,4 +1,4 @@
-unit security.controls.SecureButton;
+unit security.controls.button;
 
 {$mode objfpc}{$H+}
 

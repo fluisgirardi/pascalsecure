@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.comctrls.secure_updown;
+unit security.controls.updown;
 
 {$mode objfpc}{$H+}
 

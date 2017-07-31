@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_groupbox;
+unit security.controls.groupbox;
 
 {$mode objfpc}{$H+}
 

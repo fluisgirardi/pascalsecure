@@ -1,4 +1,4 @@
-unit security.controls.SecureBitBtn;
+unit security.controls.bitbtn;
 
 {$mode objfpc}{$H+}
 

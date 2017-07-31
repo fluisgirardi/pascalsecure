@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.stdctrls.secure_combobox;
+unit security.controls.combobox;
 
 {$mode objfpc}{$H+}
 

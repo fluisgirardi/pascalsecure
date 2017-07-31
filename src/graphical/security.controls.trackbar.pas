@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.comctrls.secure_trackbar;
+unit security.controls.trackbar;
 
 {$mode objfpc}{$H+}
 

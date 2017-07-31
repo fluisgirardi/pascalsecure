@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.dbctrls.secure_dbtext;
+unit security.controls.dbtext;
 
 {$mode objfpc}{$H+}
 

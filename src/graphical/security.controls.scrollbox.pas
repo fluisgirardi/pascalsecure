@@ -1,4 +1,4 @@
-unit pascalscada.secure_controls.forms.secure_scrollbox;
+unit security.controls.scrollbox;
 
 {$mode objfpc}{$H+}
 
