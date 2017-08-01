@@ -47,15 +47,15 @@
       </Item7>
       <Item8>
         <Filename Value="security.actions.useraction.pas"/>
-        <UnitName Value="pascalscada.secure_actions.secure_action"/>
+        <UnitName Value="security.actions.useraction"/>
       </Item8>
       <Item9>
         <Filename Value="security.controls.bitbtn.pas"/>
         <UnitName Value="security.controls.bitbtn"/>
       </Item9>
       <Item10>
-        <Filename Value="security.controls.button.pas"/>
-        <UnitName Value="security.controls.button"/>
+        <Filename Value="security.controls.securebutton.pas"/>
+        <UnitName Value="security.controls.securebutton"/>
       </Item10>
       <Item11>
         <Filename Value="security.controls.checkbox.pas"/>
@@ -158,8 +158,8 @@
         <UnitName Value="security.controls.statictext"/>
       </Item35>
       <Item36>
-        <Filename Value="security.controls.tabsheet.pas"/>
-        <UnitName Value="security.controls.tabsheet"/>
+        <Filename Value="security.controls.securetabsheet.pas"/>
+        <UnitName Value="security.controls.securetabsheet"/>
       </Item36>
       <Item37>
         <Filename Value="security.controls.togglebox.pas"/>

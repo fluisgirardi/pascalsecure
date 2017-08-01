@@ -1,4 +1,22 @@
-unit security.controls.button;
+unit security.controls.SecureButton;
+{
+    This file is part of the PascalSECURE Project 2017
+    Copyright (c) Fabio Luis Girardi
+      Parts: (c) Andreas Frieß
+
+    See the files COPYING.LGPL and COPYING.modifiedLGPL,
+    included in this distribution.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+    It is a standalone part of PascalSCADA 1.0
+       - A multiplatform SCADA framework for Lazarus.
+--------------------------------------------------------------------------------
+ Contibutors:
+
+ ******************************************************************************}
 
 {$mode objfpc}{$H+}
 
@@ -14,6 +32,9 @@ type
   { TSecureCustomButton }
 
   TSecureCustomButton = class(TCustomButton, ISecureControlInterface)
+  private
+    FSecureHide: Boolean;
+    procedure SetSecureHide(AValue: Boolean);
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -31,8 +52,10 @@ type
     //: @seealso(ISecureControlInterface.CanBeAccessed)
     procedure CanBeAccessed(a:Boolean); virtual;
 
+    ////: @exclude
+    //procedure SetEnabled(Value: Boolean); override;
     //: @exclude
-    procedure SetEnabled(Value: Boolean); override;
+    procedure SetMyVisible(Value: Boolean);
     //: @exclude
     property Enabled read FIsEnabled write SetEnabled default true;
 
@@ -42,6 +65,8 @@ type
     //: Control security code. Empty disable the security manager over the control.
     {$ENDIF}
     property SecurityCode:String read FSecurityCode write SetSecurityCode;
+    //: If set the control is hidden, if not the control is disabled
+    property SecureHideOrEnable:Boolean read FSecureHide write SetSecureHide;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -97,6 +122,7 @@ type
     property TabOrder;
     property TabStop;
     property Visible;
+    property SecureHideOrEnable;
   end;
 
 implementation
@@ -109,6 +135,7 @@ begin
   FIsEnabled:=true;
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
+  FSecureHide:=True;
   GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
@@ -116,6 +143,12 @@ destructor TSecureCustomButton.Destroy;
 begin
   GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
+end;
+
+procedure TSecureCustomButton.SetSecureHide(AValue: Boolean);
+begin
+  if FSecureHide=AValue then Exit;
+  FSecureHide:=AValue;
 end;
 
 procedure TSecureCustomButton.SetSecurityCode(AValue: String);
@@ -137,13 +170,27 @@ end;
 procedure TSecureCustomButton.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
-  SetEnabled(FIsEnabled);
+  SetMyVisible(FIsEnabled);
 end;
 
-procedure TSecureCustomButton.SetEnabled(Value: Boolean);
+//procedure TSecureCustomButton.SetEnabled(Value: Boolean);
+//begin
+//  FIsEnabled:=Value;
+//  SetMyVisible(FIsEnabled);
+//  //inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
+//end;
+
+procedure TSecureCustomButton.SetMyVisible(Value: Boolean);
 begin
   FIsEnabled:=Value;
-  inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
+  if FSecureHide then begin
+    inherited Visible := FIsEnabled and FIsEnabledBySecurity;
+    inherited Enabled:= True;
+  end
+  else begin
+    inherited Visible := True;
+    inherited Enabled:= FIsEnabled and FIsEnabledBySecurity;;
+  end;
 end;
 
 end.

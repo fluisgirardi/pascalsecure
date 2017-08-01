@@ -20,6 +20,8 @@ type
     Memo1: TMemo;
     CustomizedUserManagement1: TUserCustomizedUserManagement;
     SecureButton1: TSecureButton;
+    SecureButton2: TSecureButton;
+    UserCustomizedUserManagement1: TUserCustomizedUserManagement;
     procedure BuLoginAndiClick(Sender: TObject);
     procedure BuLoginBClick(Sender: TObject);
     procedure BuLogoutClick(Sender: TObject);
@@ -30,9 +32,9 @@ type
       pass: String; var aUID: Integer; var ValidUser: Boolean;
       LoginAction: Boolean);
     procedure CustomizedUserManagement1GetUserLogin(var UserInfo: String);
-    procedure CustomizedUserManagement1Logout(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure SecureButton1Click(Sender: TObject);
+    procedure UserCustomizedUserManagement1Logout(Sender: TObject);
   private
     LastValidUser:String;
   public
@@ -69,21 +71,21 @@ begin
   Memo1.Append('CustomizedUserManagement1GetUserLogin' + ' ' +UserInfo);
 end;
 
-procedure TForm1.CustomizedUserManagement1Logout(Sender: TObject);
-begin
-  Memo1.Append('CustomizedUserManagement1Logout');
-  LastValidUser:='';
-end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-  if Assigned(CustomizedUserManagement1) then
-    FreeAndNil(CustomizedUserManagement1);
+  //
 end;
 
 procedure TForm1.SecureButton1Click(Sender: TObject);
 begin
-  Memo1.Append('SecureButton1Click');
+  Memo1.Append('SecureButton Clicked');
+end;
+
+procedure TForm1.UserCustomizedUserManagement1Logout(Sender: TObject);
+begin
+  Memo1.Append('CustomizedUserManagement1Logout');
+  LastValidUser:='';
 end;
 
 procedure TForm1.CustomizedUserManagement1CanAccess(securityCode: String;
@@ -123,11 +125,6 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  CustomizedUserManagement1 := TUserCustomizedUserManagement.Create(nil);
-  CustomizedUserManagement1.OnCanAccess:=@CustomizedUserManagement1CanAccess;
-  CustomizedUserManagement1.OnCheckUserAndPass:=@CustomizedUserManagement1CheckUserAndPass;
-  CustomizedUserManagement1.OnGetUserLogin:=@CustomizedUserManagement1GetUserLogin;
-  CustomizedUserManagement1.OnLogout:=@CustomizedUserManagement1Logout;
   Memo1.Clear;
   Memo1.Append('Create');
 end;
