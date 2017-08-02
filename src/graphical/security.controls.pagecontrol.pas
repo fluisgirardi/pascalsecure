@@ -24,7 +24,7 @@ unit security.controls.pagecontrol;
 interface
 
 uses
-  Classes, SysUtils, ComCtrls, Controls, secure_tabsheet;
+  Classes, SysUtils, ComCtrls, Controls, security.controls.SecureTabsheet;
 
 type
   { TSecurePageControl }

@@ -8,7 +8,7 @@ uses
   Classes,
   LCLType,
   WSStdCtrls,
-  pascalscada.secure_controls.stdctrls.secure_custom_checkbox;
+  security.controls.custom_checkbox;
 
 type
 

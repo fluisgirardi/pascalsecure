@@ -26,7 +26,7 @@ uses
   FormEditingIntf,
   ProjectIntf,
   LazIDEIntf,
-  security.controls.SecureBitBtn,
+  security.controls.bitbtn,
   security.controls.SecureButton,
   security.controls.SecureTabsheet;
 

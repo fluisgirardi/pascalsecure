@@ -7,7 +7,7 @@ interface
 uses
   Classes,
   CheckLst,
-  pascalscada.security.control_security_manager;
+  security.manager.controls_manager;
 
 type
 
@@ -119,12 +119,12 @@ begin
   FIsEnabled:=true;
   FIsEnabledBySecurity:=true;
   FSecurityCode:='';
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
 destructor TSecureCustomCheckListBox.Destroy;
 begin
-  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 

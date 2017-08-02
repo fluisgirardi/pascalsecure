@@ -8,8 +8,8 @@ uses
   Forms,
   Controls,
   Classes,
-  pascalscada.security.control_security_manager,
-  pascalscada.security.security_exceptions;
+  security.manager.controls_manager,
+  security.exceptions;
 
 type
 
@@ -80,18 +80,18 @@ begin
     FSecurityCode:='';
   end;
 
-  GetPascalSCADAControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
 destructor TpSCADASecureForm.Destroy;
 begin
-  GetPascalSCADAControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
+  GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
 function TpSCADASecureForm.ShowModal: Integer;
 begin
-  if GetPascalSCADAControlSecurityManager.CanAccess(FSecurityCode)=false then
+  if GetControlSecurityManager.CanAccess(FSecurityCode)=false then
     raise ESecuritySystemAccessDenied.Create(FSecurityCode);
 
   Result:=inherited ShowModal;
@@ -161,7 +161,7 @@ begin
 
   if Visible and
      (FAllowUnauthorizedShowForm=false) and
-     (not GetPascalSCADAControlSecurityManager.CanAccess(FSecurityCode)) then
+     (not GetControlSecurityManager.CanAccess(FSecurityCode)) then
     Close;
 end;
 
