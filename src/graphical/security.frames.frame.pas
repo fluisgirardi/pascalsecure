@@ -12,7 +12,7 @@ uses
 
 type
 
-  TpSCADASecureFrame = class(TFrame, ISecureControlInterface)
+  TSecureFrame = class(TFrame, ISecureControlInterface)
   protected
     FSecurityCode: String;
     FIsEnabled,
@@ -52,9 +52,9 @@ type
 
 implementation
 
-{ TpSCADASecureFrame }
+{ TSecureFrame }
 
-constructor TpSCADASecureFrame.Create(TheOwner: TComponent);
+constructor TSecureFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FIsEnabled:=true;
@@ -66,13 +66,13 @@ begin
   GetControlSecurityManager.RegisterControl(Self as ISecureControlInterface);
 end;
 
-destructor TpSCADASecureFrame.Destroy;
+destructor TSecureFrame.Destroy;
 begin
   GetControlSecurityManager.UnRegisterControl(Self as ISecureControlInterface);
   inherited Destroy;
 end;
 
-procedure TpSCADASecureFrame.SetSecurityCode(AValue: String);
+procedure TSecureFrame.SetSecurityCode(AValue: String);
 begin
   if [csReading,csLoading]*ComponentState=[] then
     SetControlSecurityCode(FSecurityCode,AValue,(Self as ISecureControlInterface))
@@ -80,30 +80,30 @@ begin
     FSecurityCode:=AValue;
 end;
 
-function TpSCADASecureFrame.GetControlSecurityCode: String;
+function TSecureFrame.GetControlSecurityCode: String;
 begin
   Result:=FSecurityCode;
 end;
 
-procedure TpSCADASecureFrame.MakeUnsecure;
+procedure TSecureFrame.MakeUnsecure;
 begin
   FSecurityCode:='';
   CanBeAccessed(true);
 end;
 
-procedure TpSCADASecureFrame.CanBeAccessed(a: Boolean);
+procedure TSecureFrame.CanBeAccessed(a: Boolean);
 begin
   FIsEnabledBySecurity := a;
   SetEnabled(FIsEnabled);
 end;
 
-procedure TpSCADASecureFrame.SetEnabled(Value: Boolean);
+procedure TSecureFrame.SetEnabled(Value: Boolean);
 begin
   FIsEnabled:=Value;
   inherited SetEnabled(FIsEnabled and FIsEnabledBySecurity);
 end;
 
-procedure TpSCADASecureFrame.Loaded;
+procedure TSecureFrame.Loaded;
 var
   AValue: String;
 begin
