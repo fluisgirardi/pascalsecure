@@ -12,8 +12,9 @@ uses
   Forms,
   StdCtrls,
   sysutils,
-  security.manager.basic_user_management,
-  security.manager.controls_manager;
+  security.manager.schema,
+  security.manager.custom_usrmgnt_interface,
+  security.manager.basic_user_management;
 
 type
 
@@ -60,19 +61,26 @@ type
     property UserPassword:String read GetUserPassword write SetUserPassword;
   end;
 
+  { TGraphicalUsrMgntInterface }
 
-
-  { TBasicGraphicalUserManagement }
-
-  TBasicGraphicalUserManagement = class(TBasicUserManagement)
+  TGraphicalUsrMgntInterface = class(TCustomUsrMgntInterface)
   private
-    procedure UnfreezeLogin(Sender: TObject);
+    //procedure UnfreezeLogin(Sender: TObject);
   protected
     frmLogin:TCustomFrmLogin;
   public
-    function Login: Boolean; override; overload;
-    function CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean;
-      var userlogin: String): Boolean; override;
+    //function Login: Boolean; override; overload;
+    //function CheckIfUserIsAllowed(sc: String; RequireUserLogin: Boolean;
+    //  var userlogin: String): Boolean; override;
+  public
+    function  Login(out aLogin, aPass:UTF8String):Boolean; override;
+    function  Login:Boolean; override;
+    function  CanLogout:Boolean; override;
+    procedure UserManagement(aSchema:TUsrMgntSchema); override;
+    procedure FreezeUserLogin; override;
+    procedure UnfreezeUserLogin; override;
+    procedure ProcessMessages; override;
+    function  LoginVisibleBetweenRetries:Boolean; override;
   end;
 
 ResourceString
@@ -167,22 +175,27 @@ begin
   btnButtons.Enabled:=false;
 end;
 
-{ TBasicGraphicalUserManagement }
+{ TGraphicalUsrMgntInterface }
 
-procedure TBasicGraphicalUserManagement.UnfreezeLogin(Sender: TObject);
+function TGraphicalUsrMgntInterface.Login(out aLogin, aPass: UTF8String
+  ): Boolean;
+var
+  afrmLogin: TFrmLogin;
 begin
-  if sender is TTimer then begin
-    TTimer(sender).Enabled:=false;
-    if Assigned(frmLogin) then begin
-      frmLogin.Close;
-      frmLogin.EnableEntry;
+  afrmLogin:=TFrmLogin.CreateNew(Application);
+  try
+    Result:=afrmLogin.ShowModal=mrOK;
+    if Result then begin
+      aLogin:=frmLogin.UserLogin;
+      aPass :=frmLogin.UserPassword;
     end;
+  finally
+    FreeAndNil(afrmLogin);
   end;
 end;
 
-function TBasicGraphicalUserManagement.Login: Boolean;
+function TGraphicalUsrMgntInterface.Login: Boolean;
 var
-  frozenTimer:TTimer;
   retries:LongInt;
   aborted, loggedin:Boolean;
   aUserID: Integer;
@@ -193,12 +206,8 @@ begin
     exit;
   end;
 
-  frozenTimer:=TTimer.Create(nil);
-  frozenTimer.Enabled:=false;
-  frozenTimer.Interval:=LoginFrozenTime;
-  frozenTimer.Tag:=1; //login
-  frozenTimer.OnTimer:=@UnfreezeLogin;
   frmLogin:=TFrmLogin.CreateNew(nil);
+  frmLogin.AddHandlerClose(@LoginFormClosed);
   retries:=0;
   aborted:=false;
   loggedin:=False;
@@ -238,7 +247,38 @@ begin
   end;
 end;
 
-function TBasicGraphicalUserManagement.CheckIfUserIsAllowed(sc: String;
+function TGraphicalUsrMgntInterface.CanLogout: Boolean;
+begin
+  Result:=inherited CanLogout;
+end;
+
+procedure TGraphicalUsrMgntInterface.UserManagement(aSchema: TUsrMgntSchema);
+begin
+
+end;
+
+procedure TGraphicalUsrMgntInterface.FreezeUserLogin;
+begin
+  inherited FreezeUserLogin;
+end;
+
+procedure TGraphicalUsrMgntInterface.UnfreezeUserLogin;
+begin
+  inherited UnfreezeUserLogin;
+end;
+
+procedure TGraphicalUsrMgntInterface.ProcessMessages;
+begin
+  Application.ProcessMessages;
+  CheckSynchronize(1);
+end;
+
+function TGraphicalUsrMgntInterface.LoginVisibleBetweenRetries: Boolean;
+begin
+  Result:=true;
+end;
+
+function TGraphicalUsrMgntInterface.CheckIfUserIsAllowed(sc: String;
   RequireUserLogin: Boolean; var userlogin: String): Boolean;
 var
   frozenTimer:TTimer;
