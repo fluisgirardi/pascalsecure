@@ -45,7 +45,6 @@
       </Item7>
       <Item8>
         <Filename Value="pascalsecure_reg.pas"/>
-        <HasRegisterProc Value="True"/>
         <UnitName Value="pascalsecure_reg"/>
       </Item8>
     </Files>

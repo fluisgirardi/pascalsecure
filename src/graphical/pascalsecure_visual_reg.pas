@@ -65,6 +65,7 @@ uses
   security.controls.updown,
   security.forms.form,
   security.frames.frame,
+  security.manager.custom_user_management,
   security.manager.graphical_user_management;
 
 type
@@ -88,6 +89,7 @@ type
   end;
 
 ResourceString
+  SPascalSecurePalette = 'PascalSecure';
   SPascalSecureStdPalette = 'PascalSecure Std. Controls';
   SPascalSecureDBPalette = 'PascalSecure DB Controls';
   SPascalSecureActions = 'PascalSecure Actions';
@@ -110,6 +112,9 @@ begin
                                         TLogin_LogoutAction,
                                         TManageUsersAndGroupsAction,
                                         TSecureAction],nil);
+
+  RegisterComponents(SPascalSecurePalette,[TUserCustomizedUserManagement,
+                                           TGraphicalUsrMgntInterface]);
 
 
   RegisterComponents(SPascalSecureStdPalette, [TSecureButton,

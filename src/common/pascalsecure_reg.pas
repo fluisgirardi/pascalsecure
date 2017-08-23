@@ -10,7 +10,7 @@ uses
   ;
 
 ResourceString
-  SPascalSecurePalette = 'PascalSecure_Controls';
+  SPascalSecurePalette = 'PascalSecure';
 
 procedure Register;
 

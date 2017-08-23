@@ -2,6 +2,6 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
 #: pascalsecure_reg.spascalsecurepalette
-msgid "PascalSecure_Controls"
+msgid "PascalSecure"
 msgstr ""
 

@@ -21,7 +21,7 @@ type
   TCanAccessEvent            = procedure(securityCode:String; var CanAccess:Boolean) of object;
   TUIDCanAccessEvent         = procedure(aUID:Integer; securityCode:String; var CanAccess:Boolean) of object;
 
-  { TpSCADACustomizedUserManagement }
+  { TUserCustomizedUserManagement }
 
   TUserCustomizedUserManagement = class(TBasicUserManagement)
   private
@@ -60,6 +60,7 @@ type
 
     property SuccessfulLogin;
     property FailureLogin;
+    property UsrMgntInterface;
   published
     property OnCheckUserAndPass    :TCheckUserAndPasswordEvent read FCheckUserAndPasswordEvent write FCheckUserAndPasswordEvent;
     property OnGetUserName         :TGetUserNameAndLogin       read FGetUserName               write FGetUserName;
