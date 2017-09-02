@@ -1,0 +1,85 @@
+object secureChangeUsrPass: TsecureChangeUsrPass
+  Left = 444
+  Height = 223
+  Top = 244
+  Width = 282
+  BorderStyle = bsDialog
+  Caption = 'Change current user password'
+  ClientHeight = 223
+  ClientWidth = 282
+  Position = poScreenCenter
+  LCLVersion = '1.9.0.0'
+  object Label1: TLabel
+    Left = 8
+    Height = 17
+    Top = 8
+    Width = 162
+    Caption = '&Insert your current password'
+    FocusControl = Edit1
+    ParentColor = False
+  end
+  object Edit1: TEdit
+    Left = 8
+    Height = 27
+    Top = 24
+    Width = 264
+    EchoMode = emPassword
+    PasswordChar = '*'
+    TabOrder = 0
+    Text = 'CurrenPassword'
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 17
+    Top = 72
+    Width = 82
+    Caption = '&New password'
+    FocusControl = Edit2
+    ParentColor = False
+  end
+  object Edit2: TEdit
+    Left = 8
+    Height = 27
+    Top = 88
+    Width = 264
+    EchoMode = emPassword
+    PasswordChar = '*'
+    TabOrder = 1
+    Text = 'NewPassword'
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 17
+    Top = 120
+    Width = 128
+    Caption = '&Confirm new password'
+    FocusControl = Edit3
+    ParentColor = False
+  end
+  object Edit3: TEdit
+    Left = 8
+    Height = 27
+    Top = 136
+    Width = 264
+    EchoMode = emPassword
+    PasswordChar = '*'
+    TabOrder = 2
+    Text = 'ConfirmPassword'
+  end
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 42
+    Top = 175
+    Width = 270
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 3
+    ShowButtons = [pbOK, pbCancel]
+  end
+end

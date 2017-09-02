@@ -1,0 +1,53 @@
+object secureUsrLvlMgnt: TsecureUsrLvlMgnt
+  Left = 150
+  Height = 428
+  Top = 167
+  Width = 557
+  Caption = 'secureUsrLvlMgnt'
+  ClientHeight = 428
+  ClientWidth = 557
+  Position = poScreenCenter
+  LCLVersion = '1.9.0.0'
+  object ListView1: TListView
+    Left = 0
+    Height = 374
+    Top = 0
+    Width = 557
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Login'
+        MinWidth = 150
+        Width = 150
+      end    
+      item
+        Caption = 'Full name'
+        MinWidth = 300
+        Width = 300
+      end    
+      item
+        Caption = 'User level'
+        MaxWidth = 50
+        Width = 105
+      end>
+    ScrollBars = ssAutoVertical
+    TabOrder = 0
+    ViewStyle = vsReport
+  end
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 42
+    Top = 380
+    Width = 545
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 1
+    ShowButtons = [pbClose]
+  end
+end
