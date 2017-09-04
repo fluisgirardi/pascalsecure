@@ -1,4 +1,4 @@
-unit security.manager.changeusrpass;
+unit security.manager.changepassdlg;
 
 {$mode objfpc}{$H+}
 

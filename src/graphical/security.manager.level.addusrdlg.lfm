@@ -1,0 +1,111 @@
+object secureLevelAddUser: TsecureLevelAddUser
+  Left = 421
+  Height = 270
+  Top = 164
+  Width = 320
+  BorderStyle = bsDialog
+  Caption = 'Add user...'
+  ClientHeight = 270
+  ClientWidth = 320
+  Position = poScreenCenter
+  LCLVersion = '1.9.0.0'
+  object Label1: TLabel
+    Left = 8
+    Height = 17
+    Top = 8
+    Width = 30
+    Caption = '&Login'
+    ParentColor = False
+  end
+  object usrLogin: TEdit
+    Left = 8
+    Height = 27
+    Top = 24
+    Width = 144
+    TabOrder = 0
+    Text = 'usrLogin'
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 17
+    Top = 64
+    Width = 82
+    Caption = 'Full &user name'
+    ParentColor = False
+  end
+  object usrFullName: TEdit
+    Left = 8
+    Height = 27
+    Top = 80
+    Width = 304
+    TabOrder = 2
+    Text = 'usrFullName'
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 17
+    Top = 120
+    Width = 54
+    Caption = 'Pa&ssword'
+    ParentColor = False
+  end
+  object usrPassword: TEdit
+    Left = 8
+    Height = 27
+    Top = 136
+    Width = 304
+    EchoMode = emPassword
+    PasswordChar = '*'
+    TabOrder = 3
+    Text = 'usrPassword'
+  end
+  object Label4: TLabel
+    Left = 8
+    Height = 17
+    Top = 168
+    Width = 102
+    Caption = '&Confirm password'
+    ParentColor = False
+  end
+  object usrConfirmPassword: TEdit
+    Left = 8
+    Height = 27
+    Top = 184
+    Width = 304
+    EchoMode = emPassword
+    PasswordChar = '*'
+    TabOrder = 4
+    Text = 'usrConfirmPassword'
+  end
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 42
+    Top = 222
+    Width = 308
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 5
+    ShowButtons = [pbOK, pbCancel]
+  end
+  object Label5: TLabel
+    Left = 160
+    Height = 17
+    Top = 8
+    Width = 56
+    Caption = 'User le&vel'
+    ParentColor = False
+  end
+  object SpinEdit1: TSpinEdit
+    Left = 160
+    Height = 27
+    Top = 24
+    Width = 152
+    TabOrder = 1
+  end
+end

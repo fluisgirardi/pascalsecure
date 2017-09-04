@@ -1,9 +1,9 @@
 object secureUsrLvlMgnt: TsecureUsrLvlMgnt
-  Left = 150
+  Left = 383
   Height = 428
   Top = 167
   Width = 557
-  Caption = 'secureUsrLvlMgnt'
+  Caption = 'User management'
   ClientHeight = 428
   ClientWidth = 557
   Position = poScreenCenter

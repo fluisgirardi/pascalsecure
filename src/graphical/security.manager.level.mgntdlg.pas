@@ -1,4 +1,4 @@
-unit security.manager.level.lvlmgnt;
+unit security.manager.level.mgntdlg;
 
 {$mode objfpc}{$H+}
 
