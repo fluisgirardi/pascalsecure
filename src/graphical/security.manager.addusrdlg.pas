@@ -9,7 +9,7 @@ uses
   ButtonPanel, ComCtrls, Spin;
 
 type
-  TsecureLevelAddUser = class(TForm)
+  TsecureAddUser = class(TForm)
     ButtonPanel1: TButtonPanel;
     UserEnabled: TCheckBox;
     Label2: TLabel;
@@ -27,7 +27,7 @@ type
   end;
 
 var
-  secureLevelAddUser: TsecureLevelAddUser;
+  secureAddUser: TsecureAddUser;
 
 implementation
 

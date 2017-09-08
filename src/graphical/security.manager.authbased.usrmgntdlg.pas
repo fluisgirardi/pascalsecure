@@ -9,7 +9,7 @@ uses
   ComCtrls;
 
 type
-  TForm2 = class(TForm)
+  TAuthBasedUsrMgnt = class(TForm)
     ButtonPanel1: TButtonPanel;
     ListView1: TListView;
     SecurePageControl1: TPageControl;
@@ -22,7 +22,7 @@ type
   end;
 
 var
-  Form2: TForm2;
+  AuthBasedUsrMgnt: TAuthBasedUsrMgnt;
 
 implementation
 

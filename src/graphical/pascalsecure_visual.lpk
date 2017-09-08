@@ -15,7 +15,7 @@
     <Description Value="A security system for Lazarus LCL - visual components "/>
     <License Value="LGPL v2.1 with linking exception"/>
     <Version Major="1"/>
-    <Files Count="46">
+    <Files Count="47">
       <Item1>
         <Filename Value="pascalsecure_visual_reg.pas"/>
         <HasRegisterProc Value="True"/>
@@ -54,112 +54,112 @@
         <UnitName Value="security.controls.bitbtn"/>
       </Item9>
       <Item10>
-        <Filename Value="security.controls.securebutton.pas"/>
-        <UnitName Value="security.controls.securebutton"/>
-      </Item10>
-      <Item11>
         <Filename Value="security.controls.checkbox.pas"/>
         <UnitName Value="security.controls.checkbox"/>
-      </Item11>
-      <Item12>
+      </Item10>
+      <Item11>
         <Filename Value="security.controls.checkgroup.pas"/>
         <UnitName Value="security.controls.checkgroup"/>
-      </Item12>
-      <Item13>
+      </Item11>
+      <Item12>
         <Filename Value="security.controls.checklistbox.pas"/>
         <UnitName Value="security.controls.checklistbox"/>
-      </Item13>
-      <Item14>
+      </Item12>
+      <Item13>
         <Filename Value="security.controls.combobox.pas"/>
         <UnitName Value="security.controls.combobox"/>
-      </Item14>
-      <Item15>
+      </Item13>
+      <Item14>
         <Filename Value="security.controls.custom_checkbox.pas"/>
         <UnitName Value="security.controls.custom_checkbox"/>
-      </Item15>
-      <Item16>
+      </Item14>
+      <Item15>
         <Filename Value="security.controls.dbedit.pas"/>
         <UnitName Value="security.controls.dbedit"/>
-      </Item16>
-      <Item17>
+      </Item15>
+      <Item16>
         <Filename Value="security.controls.dbmemo.pas"/>
         <UnitName Value="security.controls.dbmemo"/>
-      </Item17>
-      <Item18>
+      </Item16>
+      <Item17>
         <Filename Value="security.controls.dbnavigator.pas"/>
         <UnitName Value="security.controls.dbnavigator"/>
-      </Item18>
-      <Item19>
+      </Item17>
+      <Item18>
         <Filename Value="security.controls.dbtext.pas"/>
         <UnitName Value="security.controls.dbtext"/>
-      </Item19>
-      <Item20>
+      </Item18>
+      <Item19>
         <Filename Value="security.controls.edit.pas"/>
         <UnitName Value="security.controls.edit"/>
-      </Item20>
-      <Item21>
+      </Item19>
+      <Item20>
         <Filename Value="security.controls.groupbox.pas"/>
         <UnitName Value="security.controls.groupbox"/>
-      </Item21>
-      <Item22>
+      </Item20>
+      <Item21>
         <Filename Value="security.controls.image.pas"/>
         <UnitName Value="security.controls.image"/>
-      </Item22>
-      <Item23>
+      </Item21>
+      <Item22>
         <Filename Value="security.controls.lbl.pas"/>
         <UnitName Value="security.controls.lbl"/>
-      </Item23>
-      <Item24>
+      </Item22>
+      <Item23>
         <Filename Value="security.controls.listbox.pas"/>
         <UnitName Value="security.controls.listbox"/>
-      </Item24>
-      <Item25>
+      </Item23>
+      <Item24>
         <Filename Value="security.controls.maskedit.pas"/>
         <UnitName Value="security.controls.maskedit"/>
-      </Item25>
-      <Item26>
+      </Item24>
+      <Item25>
         <Filename Value="security.controls.memo.pas"/>
         <UnitName Value="security.controls.memo"/>
-      </Item26>
-      <Item27>
+      </Item25>
+      <Item26>
         <Filename Value="security.controls.pagecontrol.pas"/>
         <UnitName Value="security.controls.pagecontrol"/>
-      </Item27>
-      <Item28>
+      </Item26>
+      <Item27>
         <Filename Value="security.controls.panel.pas"/>
         <UnitName Value="security.controls.panel"/>
-      </Item28>
-      <Item29>
+      </Item27>
+      <Item28>
         <Filename Value="security.controls.progressbar.pas"/>
         <UnitName Value="security.controls.progressbar"/>
-      </Item29>
-      <Item30>
+      </Item28>
+      <Item29>
         <Filename Value="security.controls.radiobutton.pas"/>
         <UnitName Value="security.controls.radiobutton"/>
-      </Item30>
-      <Item31>
+      </Item29>
+      <Item30>
         <Filename Value="security.controls.radiogroup.pas"/>
         <UnitName Value="security.controls.radiogroup"/>
-      </Item31>
-      <Item32>
+      </Item30>
+      <Item31>
         <Filename Value="security.controls.scrollbar.pas"/>
         <UnitName Value="security.controls.scrollbar"/>
-      </Item32>
-      <Item33>
+      </Item31>
+      <Item32>
         <Filename Value="security.controls.scrollbox.pas"/>
         <UnitName Value="security.controls.scrollbox"/>
+      </Item32>
+      <Item33>
+        <Filename Value="security.controls.securebutton.pas"/>
+        <UnitName Value="security.controls.SecureButton"/>
       </Item33>
       <Item34>
-        <Filename Value="security.controls.speedbutton.pas"/>
-        <UnitName Value="security.controls.speedbutton"/>
+        <Filename Value="security.controls.securetabsheet.pas"/>
+        <UnitName Value="security.controls.SecureTabsheet"/>
       </Item34>
       <Item35>
-        <Filename Value="security.controls.statictext.pas"/>
-        <UnitName Value="security.controls.statictext"/>
+        <Filename Value="security.controls.speedbutton.pas"/>
+        <UnitName Value="security.controls.speedbutton"/>
       </Item35>
       <Item36>
-        <Filename Value="security.controls.securetabsheet.pas"/>
-        <UnitName Value="security.controls.securetabsheet"/>
+        <Filename Value="security.controls.statictext.pas"/>
+        <UnitName Value="security.controls.statictext"/>
       </Item36>
       <Item37>
         <Filename Value="security.controls.togglebox.pas"/>
@@ -182,25 +182,29 @@
         <UnitName Value="security.frames.frame"/>
       </Item41>
       <Item42>
-        <Filename Value="security.manager.graphical_user_management.pas"/>
-        <UnitName Value="security.manager.graphical_user_management"/>
+        <Filename Value="security.manager.addusrdlg.pas"/>
+        <UnitName Value="security.manager.addusrdlg"/>
       </Item42>
       <Item43>
-        <Filename Value="security.manager.changepassdlg.pas"/>
-        <UnitName Value="security.manager.changepassdlg"/>
-      </Item43>
-      <Item44>
-        <Filename Value="security.manager.level.mgntdlg.pas"/>
-        <UnitName Value="security.manager.level.mgntdlg"/>
-      </Item44>
-      <Item45>
-        <Filename Value="security.manager.level.addusrdlg.pas"/>
-        <UnitName Value="security.manager.level.addusrdlg"/>
-      </Item45>
-      <Item46>
         <Filename Value="security.manager.authbased.usrmgntdlg.pas"/>
         <UnitName Value="security.manager.authbased.usrmgntdlg"/>
+      </Item43>
+      <Item44>
+        <Filename Value="security.manager.changepassdlg.pas"/>
+        <UnitName Value="security.manager.changepassdlg"/>
+      </Item44>
+      <Item45>
+        <Filename Value="security.manager.graphical_user_management.pas"/>
+        <UnitName Value="security.manager.graphical_user_management"/>
+      </Item45>
+      <Item46>
+        <Filename Value="security.manager.level.addusrdlg.pas"/>
+        <UnitName Value="security.manager.level.addusrdlg"/>
       </Item46>
+      <Item47>
+        <Filename Value="security.manager.level.mgntdlg.pas"/>
+        <UnitName Value="security.manager.level.mgntdlg"/>
+      </Item47>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>

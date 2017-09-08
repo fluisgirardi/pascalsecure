@@ -110,8 +110,8 @@ type
     property TabOrder;
     property Text;
     property TextHint;
-    property TextHintFontColor;
-    property TextHintFontStyle;
+    //property TextHintFontColor;
+    //property TextHintFontStyle;
     property Visible;
   end;
 

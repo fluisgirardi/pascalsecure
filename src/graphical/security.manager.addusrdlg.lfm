@@ -1,4 +1,4 @@
-object secureLevelAddUser: TsecureLevelAddUser
+object secureAddUser: TsecureAddUser
   Left = 421
   Height = 270
   Top = 164

@@ -1,0 +1,29 @@
+inherited secureLevelAddUser: TsecureLevelAddUser
+  Left = 1520
+  Height = 340
+  Top = 250
+  Caption = 'secureLevelAddUser'
+  ClientHeight = 340
+  inherited ButtonPanel1: TButtonPanel
+    Top = 292
+  end
+  inherited UserEnabled: TCheckBox
+    Width = 152
+  end
+  object Label5: TLabel[10]
+    Left = 8
+    Height = 17
+    Top = 224
+    Width = 29
+    Caption = 'L&evel'
+    FocusControl = secureUserLevel
+    ParentColor = False
+  end
+  object secureUserLevel: TSpinEdit[11]
+    Left = 8
+    Height = 27
+    Top = 240
+    Width = 304
+    TabOrder = 6
+  end
+end

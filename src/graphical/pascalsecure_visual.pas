@@ -29,7 +29,8 @@ uses
   security.controls.trackbar, security.controls.updown, security.forms.form, 
   security.frames.frame, security.manager.graphical_user_management, 
   security.manager.changepassdlg, security.manager.level.mgntdlg, 
-  security.manager.level.addusrdlg, LazarusPackageIntf;
+  security.manager.authbased.usrmgntdlg, security.manager.addusrdlg, 
+  LazarusPackageIntf;
 
 implementation
 
