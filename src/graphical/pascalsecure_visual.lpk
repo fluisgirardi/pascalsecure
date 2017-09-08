@@ -15,7 +15,7 @@
     <Description Value="A security system for Lazarus LCL - visual components "/>
     <License Value="LGPL v2.1 with linking exception"/>
     <Version Major="1"/>
-    <Files Count="45">
+    <Files Count="46">
       <Item1>
         <Filename Value="pascalsecure_visual_reg.pas"/>
         <HasRegisterProc Value="True"/>
@@ -197,6 +197,10 @@
         <Filename Value="security.manager.level.addusrdlg.pas"/>
         <UnitName Value="security.manager.level.addusrdlg"/>
       </Item45>
+      <Item46>
+        <Filename Value="security.manager.authbased.usrmgntdlg.pas"/>
+        <UnitName Value="security.manager.authbased.usrmgntdlg"/>
+      </Item46>
     </Files>
     <RequiredPkgs Count="4">
       <Item1>

@@ -28,7 +28,8 @@ uses
   security.controls.SecureTabsheet, security.controls.togglebox, 
   security.controls.trackbar, security.controls.updown, security.forms.form, 
   security.frames.frame, security.manager.graphical_user_management, 
-  LazarusPackageIntf;
+  security.manager.changepassdlg, security.manager.level.mgntdlg, 
+  security.manager.level.addusrdlg, LazarusPackageIntf;
 
 implementation
 

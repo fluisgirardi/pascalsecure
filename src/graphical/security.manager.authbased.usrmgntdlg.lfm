@@ -1,0 +1,61 @@
+object Form2: TForm2
+  Left = 1520
+  Height = 554
+  Top = 250
+  Width = 779
+  Caption = 'Form2'
+  ClientHeight = 554
+  ClientWidth = 779
+  LCLVersion = '1.9.0.0'
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 42
+    Top = 506
+    Width = 767
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
+    TabOrder = 0
+    ShowButtons = [pbClose]
+  end
+  object SecurePageControl1: TPageControl
+    Left = 0
+    Height = 500
+    Top = 0
+    Width = 779
+    ActivePage = SecureTabSheet1
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 1
+    object SecureTabSheet1: TTabSheet
+      Caption = 'Users'
+      ClientHeight = 465
+      ClientWidth = 773
+      object ListView1: TListView
+        Left = 0
+        Height = 431
+        Top = 34
+        Width = 773
+        Align = alClient
+        Columns = <>
+        ScrollBars = ssAutoVertical
+        TabOrder = 0
+      end
+      object ToolBar1: TToolBar
+        Left = 0
+        Height = 34
+        Top = 0
+        Width = 773
+        ButtonHeight = 32
+        ButtonWidth = 32
+        Caption = 'ToolBar1'
+        TabOrder = 1
+      end
+    end
+  end
+end
