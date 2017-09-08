@@ -1,4 +1,4 @@
-unit security.manager.level.addusrdlg;
+unit security.manager.addusrdlg;
 
 {$mode objfpc}{$H+}
 
@@ -11,11 +11,10 @@ uses
 type
   TsecureLevelAddUser = class(TForm)
     ButtonPanel1: TButtonPanel;
+    UserEnabled: TCheckBox;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
-    SpinEdit1: TSpinEdit;
     usrPassword: TEdit;
     usrConfirmPassword: TEdit;
     usrLogin: TEdit;

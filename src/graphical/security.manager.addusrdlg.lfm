@@ -8,7 +8,6 @@ object secureLevelAddUser: TsecureLevelAddUser
   ClientHeight = 270
   ClientWidth = 320
   Position = poScreenCenter
-  LCLVersion = '1.9.0.0'
   object Label1: TLabel
     Left = 8
     Height = 17
@@ -93,19 +92,15 @@ object secureLevelAddUser: TsecureLevelAddUser
     TabOrder = 5
     ShowButtons = [pbOK, pbCancel]
   end
-  object Label5: TLabel
-    Left = 160
-    Height = 17
-    Top = 8
-    Width = 56
-    Caption = 'User le&vel'
-    ParentColor = False
-  end
-  object SpinEdit1: TSpinEdit
+  object UserEnabled: TCheckBox
     Left = 160
     Height = 27
     Top = 24
-    Width = 152
+    Width = 150
+    AutoSize = False
+    Caption = 'En&abled'
+    Checked = True
+    State = cbChecked
     TabOrder = 1
   end
 end
