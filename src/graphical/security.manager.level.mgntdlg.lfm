@@ -1,18 +1,21 @@
-object secureUsrLvlMgnt: TsecureUsrLvlMgnt
+inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
   Left = 383
-  Height = 428
+  Height = 470
   Top = 167
-  Width = 557
-  Caption = 'User management'
-  ClientHeight = 428
-  ClientWidth = 557
+  Width = 798
+  ClientHeight = 470
+  ClientWidth = 798
   Position = poScreenCenter
-  LCLVersion = '1.9.0.0'
-  object ListView1: TListView
+  inherited ButtonPanel1: TButtonPanel
+    Top = 422
+    Width = 786
+    TabOrder = 2
+  end
+  object ListView1: TListView[1]
     Left = 0
-    Height = 374
-    Top = 0
-    Width = 557
+    Height = 380
+    Top = 36
+    Width = 798
     Align = alClient
     Columns = <    
       item
@@ -27,27 +30,76 @@ object secureUsrLvlMgnt: TsecureUsrLvlMgnt
       end    
       item
         Caption = 'User level'
-        MaxWidth = 50
-        Width = 105
+        MinWidth = 80
+        Width = 80
+      end    
+      item
+        Caption = 'Enabled'
+        Width = 266
       end>
     ScrollBars = ssAutoVertical
     TabOrder = 0
     ViewStyle = vsReport
   end
-  object ButtonPanel1: TButtonPanel
-    Left = 6
-    Height = 42
-    Top = 380
-    Width = 545
-    OKButton.Name = 'OKButton'
-    OKButton.DefaultCaption = True
-    HelpButton.Name = 'HelpButton'
-    HelpButton.DefaultCaption = True
-    CloseButton.Name = 'CloseButton'
-    CloseButton.DefaultCaption = True
-    CancelButton.Name = 'CancelButton'
-    CancelButton.DefaultCaption = True
+  object ToolBar1: TToolBar[2]
+    Left = 0
+    Height = 36
+    Top = 0
+    Width = 798
+    ButtonHeight = 32
+    ButtonWidth = 32
+    Caption = 'ToolBar1'
+    Images = ImageList1
     TabOrder = 1
-    ShowButtons = [pbClose]
+    object ToolButton1: TToolButton
+      Left = 1
+      Height = 32
+      Top = 2
+      Caption = 'ToolButton1'
+      Style = tbsSeparator
+    end
+    object ToolButton2: TToolButton
+      Left = 9
+      Top = 2
+      Action = addUser
+    end
+    object ToolButton3: TToolButton
+      Left = 45
+      Top = 2
+      Action = delUser
+    end
+    object ToolButton4: TToolButton
+      Left = 77
+      Top = 2
+      Caption = 'ToolButton4'
+    end
+    object ToolButton5: TToolButton
+      Left = 109
+      Top = 2
+      Caption = 'ToolButton5'
+    end
+  end
+  inherited ImageList1: TImageList[3]
+  end
+  inherited ActionList1: TActionList[4]
+    object addUser: TAction[0]
+      Caption = 'addUser'
+      Hint = 'Add a new user...'
+      ImageIndex = 0
+    end
+    object delUser: TAction[1]
+      Caption = 'delUser'
+      Enabled = False
+      Hint = 'Remove selected user...'
+      ImageIndex = 1
+    end
+    object DisableUser: TAction[2]
+      Caption = 'DisableUser'
+      Hint = 'Disable selected user...'
+    end
+    object ChangePass: TAction[3]
+      Caption = 'ChangePass'
+      Hint = 'Change password of selected user...'
+    end
   end
 end

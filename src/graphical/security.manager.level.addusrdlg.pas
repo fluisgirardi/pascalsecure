@@ -9,8 +9,6 @@ uses
 
 type
   TsecureLevelAddUser = class(TsecureAddUser)
-    Label5: TLabel;
-    secureUserLevel: TSpinEdit;
   private
 
   public

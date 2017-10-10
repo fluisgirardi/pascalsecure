@@ -2,14 +2,13 @@ object Form1: TForm1
   Left = 0
   Height = 401
   Top = 0
-  Width = 650
+  Width = 873
   ActiveControl = SecureButton1
   Caption = 'Form1'
   ClientHeight = 401
-  ClientWidth = 650
+  ClientWidth = 873
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  Visible = False
   object SecureButton1: TSecureButton
     AnchorSideLeft.Control = BuLogout
     AnchorSideLeft.Side = asrBottom
@@ -63,7 +62,7 @@ object Form1: TForm1
     Left = 0
     Height = 366
     Top = 35
-    Width = 650
+    Width = 873
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 5
     Lines.Strings = (
@@ -100,14 +99,48 @@ object Form1: TForm1
     TabOrder = 5
     SecureHideOrEnable = False
   end
+  object Button1: TButton
+    Left = 504
+    Height = 25
+    Top = 5
+    Width = 107
+    Action = LoginAction1
+    TabOrder = 6
+  end
+  object Button2: TButton
+    Left = 624
+    Height = 25
+    Top = 5
+    Width = 184
+    Action = ManageUsersAndGroupsAction1
+    TabOrder = 7
+  end
   object UserCustomizedUserManagement1: TUserCustomizedUserManagement
     LoginRetries = 0
     LoginFrozenTime = 0
+    UsrMgntInterface = GraphicalUsrMgntInterface1
     OnCheckUserAndPass = CustomizedUserManagement1CheckUserAndPass
     OnGetUserLogin = CustomizedUserManagement1GetUserLogin
     OnCanAccess = CustomizedUserManagement1CanAccess
     OnLogout = UserCustomizedUserManagement1Logout
+    OnGetSchemaType = UserCustomizedUserManagement1GetSchemaType
     Left = 151
     Top = 104
+  end
+  object ActionList1: TActionList
+    Left = 151
+    Top = 256
+    object LoginAction1: TLoginAction
+      Category = 'PascalSecure Actions'
+      Caption = 'Graphical login'
+    end
+    object ManageUsersAndGroupsAction1: TManageUsersAndGroupsAction
+      Category = 'PascalSecure Actions'
+      Caption = 'Manage users and groups'
+    end
+  end
+  object GraphicalUsrMgntInterface1: TGraphicalUsrMgntInterface
+    Left = 151
+    Top = 168
   end
 end

@@ -253,8 +253,6 @@ type
     function GroupList:TSimpleUserGroupList;
   end;
 
-
-
 implementation
 
 uses security.exceptions;

@@ -6,17 +6,24 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  security.controls.SecureButton,
-  security.manager.custom_user_management;
+  ActnList, security.actions.login, security.controls.SecureButton,
+  security.manager.graphical_user_management, security.actions.manage,
+  security.manager.custom_user_management, security.manager.schema;
 
 type
 
   { TForm1 }
 
   TForm1 = class(TForm)
+    ActionList1: TActionList;
     BuLoginAndi: TButton;
     BuLogout: TButton;
     BuLoginB: TButton;
+    Button1: TButton;
+    Button2: TButton;
+    GraphicalUsrMgntInterface1: TGraphicalUsrMgntInterface;
+    LoginAction1: TLoginAction;
+    ManageUsersAndGroupsAction1: TManageUsersAndGroupsAction;
     Memo1: TMemo;
     CustomizedUserManagement1: TUserCustomizedUserManagement;
     SecureButton1: TSecureButton;
@@ -34,6 +41,8 @@ type
     procedure CustomizedUserManagement1GetUserLogin(var UserInfo: String);
     procedure FormDestroy(Sender: TObject);
     procedure SecureButton1Click(Sender: TObject);
+    procedure UserCustomizedUserManagement1GetSchemaType(
+      var SchemaType: TUsrMgntType);
     procedure UserCustomizedUserManagement1Logout(Sender: TObject);
   private
     LastValidUser:String;
@@ -48,6 +57,7 @@ implementation
 
 uses
   security.manager.controls_manager;
+
 {$R *.lfm}
 
 { TForm1 }
@@ -59,7 +69,11 @@ begin
   //
   //check the user login and password
   Memo1.Append('CustomizedUserManagement1CheckUserAndPass'+' ' + user + ' '+pass);
-  ValidUser:=(((user='andi') and (pass='1')) or ((user='user') and (pass='2')) or ((user='root') and (pass='3')));
+  ValidUser:=(((user='andi')  and (pass='1')) or
+              ((user='user')  and (pass='2')) or
+              ((user='root')  and (pass='3')) or
+              ((user='fabio') and (pass='7')));
+
   if ValidUser then
     LastValidUser:=user;
 end;
@@ -80,6 +94,12 @@ end;
 procedure TForm1.SecureButton1Click(Sender: TObject);
 begin
   Memo1.Append('SecureButton Clicked');
+end;
+
+procedure TForm1.UserCustomizedUserManagement1GetSchemaType(
+  var SchemaType: TUsrMgntType);
+begin
+  SchemaType:=umtLevel;
 end;
 
 procedure TForm1.UserCustomizedUserManagement1Logout(Sender: TObject);

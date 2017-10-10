@@ -30,10 +30,18 @@ msgstr ""
 msgid "Security code still being used!"
 msgstr ""
 
+#: security.texts.sunassigneduserschema
+msgid "Unassigned user schema (user schema object=nil)!"
+msgstr ""
+
 #: security.texts.sunassignedusrmgntintf
 msgid ""
 "Unassigned user management interface!\n"
 "Impossible to display login or user management dialogs.\n"
+msgstr ""
+
+#: security.texts.sunknownusermgntschema
+msgid "Unknown user management schema class!"
 msgstr ""
 
 #: security.texts.suserhasnotallowedtoaccessobject

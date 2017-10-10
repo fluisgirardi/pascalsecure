@@ -99,7 +99,8 @@ ResourceString
 
 implementation
 
-uses security.manager.controls_manager;
+uses security.manager.controls_manager,
+     security.exceptions;
 
 { TFrmLogin }
 
@@ -289,7 +290,36 @@ end;
 
 procedure TGraphicalUsrMgntInterface.UserManagement(aSchema: TUsrMgntSchema);
 begin
-  raise Exception.Create('Not implemented yet!');
+  if Assigned(aSchema) then begin
+    try
+      if aSchema is TUsrLevelMgntSchema then begin
+
+        exit;
+      end;
+
+      if aSchema is TUsrAuthSchema then begin
+
+        exit;
+      end;
+
+      if aSchema is TUsrGroupAuthSchema then begin
+
+        exit;
+      end;
+
+      if aSchema is TGroupAuthSchema then begin
+
+        exit;
+      end;
+
+      //unknown schema class...
+      raise EUnknownUserMgntSchema.Create;
+    finally
+      FreeAndNil(aSchema);
+    end;
+  end else
+    raise ENilUserSchema.Create;
+
 end;
 
 procedure TGraphicalUsrMgntInterface.FreezeUserLogin;

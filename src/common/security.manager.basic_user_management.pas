@@ -192,11 +192,10 @@ end;
 
 procedure TBasicUserManagement.Manage;
 begin
-  //Result:=false;
-  //if Assigned(FUsrMgntInterface) then
-  //  Result:=FUsrMgntInterface.UserManagement(GetUserSchema);
-  //else
-  //  raise EUnassignedUsrMgntIntf.Create;
+  if Assigned(FUsrMgntInterface) then
+    FUsrMgntInterface.UserManagement(GetUserSchema)
+  else
+    raise EUnassignedUsrMgntIntf.Create;
 end;
 
 function TBasicUserManagement.UsrMgntType: TUsrMgntType;

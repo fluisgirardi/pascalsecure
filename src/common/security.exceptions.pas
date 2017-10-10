@@ -64,12 +64,40 @@ type
     constructor Create;
   end;
 
+  ENilUserSchema = class(ESecurityException)
+  public
+    constructor Create;
+  end;
+
+  EUnknownUserMgntSchema = class(ESecurityException)
+  public
+    constructor Create;
+  end;
+
 implementation
+
+{ EUnknownUserMgntSchema }
+
+constructor EUnknownUserMgntSchema.Create;
+begin
+  inherited Create(SUnknownUserMgntSchema);
+end;
+
+{ ENilUserSchema }
+
+constructor ENilUserSchema.Create;
+begin
+  inherited Create(SUnassignedUserSchema);
+end;
+
+{ EUnassignedUsrMgntIntf }
 
 constructor EUnassignedUsrMgntIntf.Create;
 begin
   inherited Create(SUnassignedUsrMgntIntf);
 end;
+
+{ EInvalidLevelRanges }
 
 constructor EInvalidLevelRanges.Create(aMinLevel, aMaxLevel: Integer);
 begin

@@ -7,7 +7,8 @@ interface
 uses
   Classes,
   sysutils,
-  security.manager.basic_user_management;
+  security.manager.basic_user_management,
+  security.manager.schema;
 
 type
 
@@ -20,6 +21,8 @@ type
   TLogoutEvent               = TNotifyEvent;
   TCanAccessEvent            = procedure(securityCode:String; var CanAccess:Boolean) of object;
   TUIDCanAccessEvent         = procedure(aUID:Integer; securityCode:String; var CanAccess:Boolean) of object;
+  TGetUserSchemaType         = procedure(var SchemaType:TUsrMgntType) of object;
+  TGetUserSchema             = procedure(var Schema:TUsrMgntSchema) of object;
 
   { TUserCustomizedUserManagement }
 
@@ -28,6 +31,8 @@ type
     FCheckUserAndPasswordEvent:TCheckUserAndPasswordEvent;
     FGetUserName              :TGetUserNameAndLogin;
     FGetUserLogin             :TGetUserNameAndLogin;
+    FGetUserSchema            :TGetUserSchema;
+    FGetUserSchemaType        :TGetUserSchemaType;
     FManageUsersAndGroupsEvent:TManageUsersAndGroupsEvent;
     FRegisterSecurityCode     :TRegisterSecurityCode;
     FUIDCanAccessEvent        :TUIDCanAccessEvent;
@@ -39,7 +44,10 @@ type
 
     function  GetCurrentUserName:String; override;
     function  GetCurrentUserLogin:String; override;
-    function CanAccess(sc: String; aUID: Integer): Boolean; override; overload;
+    function  CanAccess(sc: String; aUID: Integer): Boolean; override; overload;
+
+    function UsrMgntType: TUsrMgntType; override;
+    function GetUserSchema: TUsrMgntSchema; override;
   public
     procedure Logout; override;
     procedure Manage; override;
@@ -71,6 +79,8 @@ type
     property OnCanAccess           :TCanAccessEvent            read FCanAccessEvent            write FCanAccessEvent;
     property OnUIDCanAccess        :TUIDCanAccessEvent         read FUIDCanAccessEvent         write FUIDCanAccessEvent;
     property OnLogout              :TLogoutEvent               read FLogoutEvent               write FLogoutEvent;
+    property OnGetSchemaType       :TGetUserSchemaType         read FGetUserSchemaType         write FGetUserSchemaType;
+    property OnGetUserSchema       :TGetUserSchema             read FGetUserSchema             write FGetUserSchema;
   end;
 
 implementation
@@ -126,6 +136,20 @@ begin
     end;
 end;
 
+function TUserCustomizedUserManagement.UsrMgntType: TUsrMgntType;
+begin
+  Result:=umtUnknown;
+  if Assigned(FGetUserSchemaType) then
+    FGetUserSchemaType(Result);
+end;
+
+function TUserCustomizedUserManagement.GetUserSchema: TUsrMgntSchema;
+begin
+  Result:=nil;
+  if Assigned(FGetUserSchema) then
+    FGetUserSchema(Result);
+end;
+
 procedure TUserCustomizedUserManagement.Logout;
 begin
   inherited Logout;
@@ -139,7 +163,9 @@ end;
 procedure TUserCustomizedUserManagement.Manage;
 begin
   if Assigned(FManageUsersAndGroupsEvent) then
-    FManageUsersAndGroupsEvent(Self);
+    FManageUsersAndGroupsEvent(Self)
+  else
+    inherited Manage;
 end;
 
 procedure TUserCustomizedUserManagement.ValidateSecurityCode(sc: String);
