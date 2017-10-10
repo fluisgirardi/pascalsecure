@@ -1,6 +1,6 @@
 unit security.manager.schema;
 
-{$mode objfpc}{$H+}
+{$mode objfpc}{$H+}{$M+}
 
 interface
 
@@ -166,10 +166,12 @@ type
     FMaxLevel: Integer;
     FMinLevel: Integer;
     FAdminLevel: Integer;
+    FUserLevelList:TUserLevelList;
   public
     constructor Create(aMinLevel, aMaxLevel, aAdminLevel:Integer);
     destructor Destroy; override;
   published
+    function UserList:TUserLevelList;
     property AdminLevel:Integer read FAdminLevel;
     property MinLevel:Integer read FMinLevel;
     property MaxLevel:Integer read FMaxLevel;
@@ -347,13 +349,21 @@ constructor TUsrLevelMgntSchema.Create(aMinLevel, aMaxLevel,
 begin
   inherited Create;
   FAdminLevel:=aAdminLevel;
+  FUserLevelList:=TUserLevelList.Create;
   if aMinLevel>=aMaxLevel then
     raise EInvalidLevelRanges.Create(aMinLevel,aMaxLevel);
+  FMinLevel:=aMinLevel;
+  FMaxLevel:=aMaxLevel;
 end;
 
 destructor TUsrLevelMgntSchema.Destroy;
 begin
   inherited Destroy;
+end;
+
+function TUsrLevelMgntSchema.UserList: TUserLevelList;
+begin
+  Result:=FUserLevelList;
 end;
 
 

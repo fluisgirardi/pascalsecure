@@ -43,6 +43,8 @@ type
     procedure SecureButton1Click(Sender: TObject);
     procedure UserCustomizedUserManagement1GetSchemaType(
       var SchemaType: TUsrMgntType);
+    procedure UserCustomizedUserManagement1GetUserSchema(
+      var Schema: TUsrMgntSchema);
     procedure UserCustomizedUserManagement1Logout(Sender: TObject);
   private
     LastValidUser:String;
@@ -100,6 +102,17 @@ procedure TForm1.UserCustomizedUserManagement1GetSchemaType(
   var SchemaType: TUsrMgntType);
 begin
   SchemaType:=umtLevel;
+end;
+
+procedure TForm1.UserCustomizedUserManagement1GetUserSchema(
+  var Schema: TUsrMgntSchema);
+begin
+  Schema:=TUsrLevelMgntSchema.Create(1, 100, 1);
+  with Schema as TUsrLevelMgntSchema do begin
+    UserList.Add(0,TUserWithLevelAccess.Create(0,'root','Main administrator',false, 1));
+    UserList.Add(1,TUserWithLevelAccess.Create(1,'andi','A user',            false, 1));
+    UserList.Add(2,TUserWithLevelAccess.Create(2,'user','Another user',      false, 10));
+  end;
 end;
 
 procedure TForm1.UserCustomizedUserManagement1Logout(Sender: TObject);

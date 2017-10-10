@@ -10,8 +10,8 @@ uses
   Controls,
   ExtCtrls,
   Forms,
-  StdCtrls,
-  sysutils,
+  StdCtrls, ComCtrls,
+  sysutils, math, strutils,
   security.manager.schema,
   security.manager.custom_usrmgnt_interface,
   security.manager.basic_user_management;
@@ -96,11 +96,15 @@ ResourceString
   strUserLogin         = '&Login';
   strUserPass          = '&Password';
   SSpecialLoginCaption = 'Enter a user that can access the "%s" token.';
+  strYes               = 'Yes';
+  strNo                = 'No';
 
 implementation
 
 uses security.manager.controls_manager,
-     security.exceptions;
+     security.exceptions,
+     security.manager.level.mgntdlg,
+     security.manager.level.addusrdlg;
 
 { TFrmLogin }
 
@@ -289,11 +293,46 @@ begin
 end;
 
 procedure TGraphicalUsrMgntInterface.UserManagement(aSchema: TUsrMgntSchema);
+var
+  lvlfrm:TsecureUsrLvlMgnt;
+  lvlSchema: TUsrLevelMgntSchema;
+  i: Integer;
+  usr: TUserWithLevelAccess;
+  item: TListItem;
+  lvlLength: Integer;
+
+  function RepeatString(aStr:String; count:Integer):String;
+  var
+    c: Integer;
+  begin
+    Result:='';
+    for c:=1 to count do
+      Result:=Result+aStr;
+  end;
+
 begin
   if Assigned(aSchema) then begin
     try
       if aSchema is TUsrLevelMgntSchema then begin
+        lvlSchema:=TUsrLevelMgntSchema(aSchema);
+        lvlfrm:=TsecureUsrLvlMgnt.Create(Self);
+        try
 
+          lvlLength := Max(Length(IntToStr(lvlSchema.MinLevel)), Length(IntToStr(lvlSchema.MaxLevel)));
+
+          for i:=0 to lvlSchema.UserList.Count-1 do begin
+            usr:=lvlSchema.UserList.KeyData[lvlSchema.UserList.Keys[i]];
+            item:=lvlfrm.ListView1.Items.add;
+            item.Caption:=usr.Login;
+            item.SubItems.Add(usr.UserDescription);
+            item.SubItems.Add(RightStr(RepeatString('0',lvlLength)+inttostr(usr.UserLevel),lvlLength));
+            item.SubItems.Add(ifthen(usr.UserBlocked, strYes, strNo));
+            item.Data:=usr;
+          end;
+          lvlfrm.ShowModal;
+        finally
+          FreeAndNil(lvlfrm);
+        end;
         exit;
       end;
 

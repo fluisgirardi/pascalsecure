@@ -34,7 +34,7 @@ inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
         Width = 80
       end    
       item
-        Caption = 'Enabled'
+        Caption = 'Blocked'
         Width = 266
       end>
     ScrollBars = ssAutoVertical
@@ -69,12 +69,12 @@ inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
       Action = delUser
     end
     object ToolButton4: TToolButton
-      Left = 77
+      Left = 81
       Top = 2
       Caption = 'ToolButton4'
     end
     object ToolButton5: TToolButton
-      Left = 109
+      Left = 113
       Top = 2
       Caption = 'ToolButton5'
     end
