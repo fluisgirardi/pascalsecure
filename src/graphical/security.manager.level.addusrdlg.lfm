@@ -9,6 +9,9 @@ inherited secureLevelAddUser: TsecureLevelAddUser
   end
   inherited UserEnabled: TCheckBox
     Width = 152
+    Caption = 'User &blocked'
+    Checked = False
+    State = cbUnchecked
   end
   object Label5: TLabel[10]
     Left = 8

@@ -9,6 +9,32 @@ uses
 
 type
 
+  //forward.
+  TUserWithLevelAccess = class;
+
+  IUsrLevelMgntInterface = interface
+    ['{E3103A23-FFAE-4286-8565-C41038285EEF}']
+    function AddUser(const UserLogin, UserDescription, PlainPassword:UTF8String;
+                     const UsrLevel:Integer;
+                     const Blocked:Boolean;
+                     out   UID:Integer;
+                     out   UsrObject:TUserWithLevelAccess):Boolean;
+
+    function DelUser(Const UsrObject:TUserWithLevelAccess):Boolean;
+
+    function UpdateUser(const UsrObject:TUserWithLevelAccess;
+                        const UserDescription, PlainPassword:UTF8String;
+                        const UsrLevel:Integer;
+                        const Blocked:Boolean):Boolean;
+
+    function BlockUser(const UsrObject:TUserWithLevelAccess;
+                       const Blocked:Boolean):Boolean;
+
+    function ChangeUserPass(const UsrObject:TUserWithLevelAccess;
+                            const PlainPassword:UTF8String):Boolean;
+
+  end;
+
   TUsrMgntType = (umtUnknown,
                   umtLevel,
                   umtAuthorizationByUser,
@@ -357,7 +383,14 @@ begin
 end;
 
 destructor TUsrLevelMgntSchema.Destroy;
+var
+  i: LongInt;
 begin
+  for i:=FUserLevelList.Count-1 downto 0 do begin
+    FUserLevelList.KeyData[FUserLevelList.Keys[i]].Destroy;
+    FUserLevelList.Delete(i);
+  end;
+
   inherited Destroy;
 end;
 

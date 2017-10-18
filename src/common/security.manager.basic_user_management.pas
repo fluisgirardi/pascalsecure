@@ -191,10 +191,17 @@ begin
 end;
 
 procedure TBasicUserManagement.Manage;
+var
+  schema: TUsrMgntSchema;
 begin
-  if Assigned(FUsrMgntInterface) then
-    FUsrMgntInterface.UserManagement(GetUserSchema)
-  else
+  if Assigned(FUsrMgntInterface) then begin
+    schema:=GetUserSchema;
+    try
+      FUsrMgntInterface.UserManagement(schema)
+    finally
+      FreeAndNil(schema);
+    end;
+  end else
     raise EUnassignedUsrMgntIntf.Create;
 end;
 

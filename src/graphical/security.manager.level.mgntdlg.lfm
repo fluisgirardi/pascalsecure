@@ -7,13 +7,14 @@ inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
   ClientWidth = 798
   Position = poScreenCenter
   inherited ButtonPanel1: TButtonPanel
-    Top = 422
+    Height = 41
+    Top = 423
     Width = 786
     TabOrder = 2
   end
   object ListView1: TListView[1]
     Left = 0
-    Height = 380
+    Height = 381
     Top = 36
     Width = 798
     Align = alClient
@@ -29,17 +30,22 @@ inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
         Width = 300
       end    
       item
+        Alignment = taCenter
         Caption = 'User level'
         MinWidth = 80
         Width = 80
       end    
       item
+        Alignment = taCenter
         Caption = 'Blocked'
         Width = 266
       end>
+    RowSelect = True
     ScrollBars = ssAutoVertical
     TabOrder = 0
     ViewStyle = vsReport
+    OnEditing = ListView1Editing
+    OnSelectItem = ListView1SelectItem
   end
   object ToolBar1: TToolBar[2]
     Left = 0
@@ -71,12 +77,12 @@ inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
     object ToolButton4: TToolButton
       Left = 81
       Top = 2
-      Caption = 'ToolButton4'
+      Action = ChangePass
     end
     object ToolButton5: TToolButton
       Left = 113
       Top = 2
-      Caption = 'ToolButton5'
+      Action = DisableUser
     end
   end
   inherited ImageList1: TImageList[3]
@@ -86,20 +92,24 @@ inherited secureUsrLvlMgnt: TsecureUsrLvlMgnt
       Caption = 'addUser'
       Hint = 'Add a new user...'
       ImageIndex = 0
+      OnExecute = addUserExecute
     end
     object delUser: TAction[1]
       Caption = 'delUser'
       Enabled = False
       Hint = 'Remove selected user...'
       ImageIndex = 1
+      OnExecute = delUserExecute
     end
     object DisableUser: TAction[2]
       Caption = 'DisableUser'
       Hint = 'Disable selected user...'
+      OnExecute = DisableUserExecute
     end
     object ChangePass: TAction[3]
       Caption = 'ChangePass'
       Hint = 'Change password of selected user...'
+      OnExecute = ChangePassExecute
     end
   end
 end

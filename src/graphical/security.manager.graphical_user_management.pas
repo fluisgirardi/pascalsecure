@@ -18,35 +18,35 @@ uses
 
 type
 
-  TFocusedControl = (fcUserName, fcPassword);
+  TSecureFocusedControl = (fcUserName, fcPassword);
 
   { TCustomFrmLogin }
 
-  TCustomFrmLogin = Class(TCustomForm)
+  TSecureCustomFrmLogin = Class(TCustomForm)
   private
-    FFocusedControl: TFocusedControl;
+    FFocusedControl: TSecureFocusedControl;
     FOnCancelClick: TNotifyEvent;
     FOnOKClick: TNotifyEvent;
     function GetUserLogin: String; virtual; abstract;
     function GetUserPassword: String; virtual; abstract;
-    procedure SetFocusedControl(AValue: TFocusedControl); virtual; abstract;
+    procedure SetFocusedControl(AValue: TSecureFocusedControl); virtual; abstract;
     procedure SetUserLogin(AValue: String); virtual; abstract;
     procedure SetUserPassword(AValue: String); virtual; abstract;
   public
     procedure DisableEntry; virtual; abstract;
     procedure EnableEntry; virtual; abstract;
-    property FocusedControl:TFocusedControl read FFocusedControl write SetFocusedControl;
+    property FocusedControl:TSecureFocusedControl read FFocusedControl write SetFocusedControl;
     property UserLogin:String read GetUserLogin write SetUserLogin;
     property UserPassword:String read GetUserPassword write SetUserPassword;
     property OnOKClick:TNotifyEvent read FOnOKClick write FOnOKClick;
     property OnCancelClick:TNotifyEvent read FOnCancelClick write FOnCancelClick;
   end;
 
-  TCustomFrmLoginClass = class of TCustomFrmLogin;
+  TSecureCustomFrmLoginClass = class of TSecureCustomFrmLogin;
 
   { TFrmLogin }
 
-  TFrmLogin = Class(TCustomFrmLogin)
+  TSecureFrmLogin = Class(TSecureCustomFrmLogin)
   private
     lblLogin,
     lblPassword:TLabel;
@@ -59,13 +59,13 @@ type
     procedure OKClicked(Sender: TObject);
     procedure SetUserLogin(AValue: String); override;
     procedure SetUserPassword(AValue: String); override;
-    procedure SetFocusedControl(AValue: TFocusedControl); override;
+    procedure SetFocusedControl(AValue: TSecureFocusedControl); override;
     procedure DoShow; override;
   public
     constructor CreateNew(AOwner: TComponent; Num: Integer=0); override;
     procedure DisableEntry; override;
     procedure EnableEntry; override;
-    property FocusedControl:TFocusedControl read FFocusedControl write FFocusedControl;
+    property FocusedControl:TSecureFocusedControl read FFocusedControl write FFocusedControl;
     property UserLogin:String read GetUserLogin write SetUserLogin;
     property UserPassword:String read GetUserPassword write SetUserPassword;
   end;
@@ -73,13 +73,22 @@ type
   { TGraphicalUsrMgntInterface }
 
   TGraphicalUsrMgntInterface = class(TCustomUsrMgntInterface)
+  private
+    procedure LevelAddUserClick(Sender: TObject);
+    procedure LevelBlockUserClick(Sender: TObject;
+      const aUser: TUserWithLevelAccess);
+    procedure LevelChangeUserClick(Sender: TObject;
+      const aUser: TUserWithLevelAccess);
+    procedure LevelChangeUserPassClick(Sender: TObject;
+      const aUser: TUserWithLevelAccess);
   protected
-    frmLogin:TCustomFrmLogin;
+    frmLogin:TSecureCustomFrmLogin;
     FCanCloseLogin:Boolean;
+    FCurrentUserSchema:TUsrMgntSchema;
     procedure CanCloseLogin(Sender: TObject; var CanClose: boolean);
     procedure CancelClick(Sender: TObject);
     procedure OKClick(Sender: TObject);
-    function  GetLoginClass:TCustomFrmLoginClass; virtual;
+    function  GetLoginClass:TSecureCustomFrmLoginClass; virtual;
   public
     function  Login(out aLogin, aPass:UTF8String):Boolean; override;
     function  Login:Boolean; override;
@@ -104,43 +113,43 @@ implementation
 uses security.manager.controls_manager,
      security.exceptions,
      security.manager.level.mgntdlg,
-     security.manager.level.addusrdlg;
+     security.manager.level.addusrdlg, Dialogs;
 
 { TFrmLogin }
 
-function TFrmLogin.GetUserLogin: String;
+function TSecureFrmLogin.GetUserLogin: String;
 begin
   Result:=edtLogin.Text;
 end;
 
-procedure TFrmLogin.CancelClicked(Sender: TObject);
+procedure TSecureFrmLogin.CancelClicked(Sender: TObject);
 begin
   if Assigned(FOnCancelClick) then
     FOnCancelClick(Sender)
 end;
 
-function TFrmLogin.GetUserPassword: String;
+function TSecureFrmLogin.GetUserPassword: String;
 begin
   Result:=edtPassword.Text;
 end;
 
-procedure TFrmLogin.OKClicked(Sender: TObject);
+procedure TSecureFrmLogin.OKClicked(Sender: TObject);
 begin
   if Assigned(FOnOKClick) then
     FOnOKClick(Sender);
 end;
 
-procedure TFrmLogin.SetUserLogin(AValue: String);
+procedure TSecureFrmLogin.SetUserLogin(AValue: String);
 begin
   edtLogin.Text:=AValue;
 end;
 
-procedure TFrmLogin.SetUserPassword(AValue: String);
+procedure TSecureFrmLogin.SetUserPassword(AValue: String);
 begin
   edtPassword.Text:=AValue;
 end;
 
-procedure TFrmLogin.SetFocusedControl(AValue: TFocusedControl);
+procedure TSecureFrmLogin.SetFocusedControl(AValue: TSecureFocusedControl);
 begin
   if CanFocus then
     case AValue of
@@ -151,13 +160,13 @@ begin
   FFocusedControl:=AValue;
 end;
 
-procedure TFrmLogin.DoShow;
+procedure TSecureFrmLogin.DoShow;
 begin
   inherited DoShow;
   SetFocusedControl(FFocusedControl);
 end;
 
-constructor TFrmLogin.CreateNew(AOwner: TComponent; Num: Integer);
+constructor TSecureFrmLogin.CreateNew(AOwner: TComponent; Num: Integer);
 begin
   inherited CreateNew(AOwner,Num);
   BorderStyle:=bsDialog;
@@ -199,7 +208,7 @@ begin
   btnButtons.Parent:=Self;
 end;
 
-procedure TFrmLogin.EnableEntry;
+procedure TSecureFrmLogin.EnableEntry;
 begin
   edtPassword.Enabled:=true;
   edtLogin.Enabled:=true;
@@ -207,7 +216,7 @@ begin
   DoShow;
 end;
 
-procedure TFrmLogin.DisableEntry;
+procedure TSecureFrmLogin.DisableEntry;
 begin
   edtPassword.Enabled:=false;
   edtLogin.Enabled:=false;
@@ -230,9 +239,32 @@ begin
   end;
 end;
 
-function TGraphicalUsrMgntInterface.GetLoginClass: TCustomFrmLoginClass;
+function TGraphicalUsrMgntInterface.GetLoginClass: TSecureCustomFrmLoginClass;
 begin
-  Result:=TFrmLogin;
+  Result:=TSecureFrmLogin;
+end;
+
+procedure TGraphicalUsrMgntInterface.LevelAddUserClick(Sender: TObject);
+begin
+
+end;
+
+procedure TGraphicalUsrMgntInterface.LevelBlockUserClick(Sender: TObject;
+  const aUser: TUserWithLevelAccess);
+begin
+
+end;
+
+procedure TGraphicalUsrMgntInterface.LevelChangeUserClick(Sender: TObject;
+  const aUser: TUserWithLevelAccess);
+begin
+
+end;
+
+procedure TGraphicalUsrMgntInterface.LevelChangeUserPassClick(Sender: TObject;
+  const aUser: TUserWithLevelAccess);
+begin
+
 end;
 
 procedure TGraphicalUsrMgntInterface.CanCloseLogin(Sender: TObject;
@@ -249,7 +281,7 @@ end;
 function TGraphicalUsrMgntInterface.Login(out aLogin, aPass: UTF8String
   ): Boolean;
 var
-  afrmLogin: TCustomFrmLogin;
+  afrmLogin: TSecureCustomFrmLogin;
 begin
   afrmLogin:=GetLoginClass.CreateNew(Application);
   try
@@ -311,11 +343,17 @@ var
   end;
 
 begin
-  if Assigned(aSchema) then begin
+  //allows one user management...
+  if (not Assigned(FCurrentUserSchema)) and Assigned(aSchema) then begin
+    FCurrentUserSchema:=aSchema;
     try
       if aSchema is TUsrLevelMgntSchema then begin
         lvlSchema:=TUsrLevelMgntSchema(aSchema);
         lvlfrm:=TsecureUsrLvlMgnt.Create(Self);
+        lvlfrm.OnAddUserClick:=@LevelAddUserClick;
+        lvlfrm.OnBlockUserClick:=@LevelBlockUserClick;
+        lvlfrm.OnChangeUserClick:=@LevelChangeUserClick;
+        lvlfrm.OnChangeUsrPassClick:=@LevelChangeUserPassClick;
         try
 
           lvlLength := Max(Length(IntToStr(lvlSchema.MinLevel)), Length(IntToStr(lvlSchema.MaxLevel)));
@@ -354,10 +392,14 @@ begin
       //unknown schema class...
       raise EUnknownUserMgntSchema.Create;
     finally
-      FreeAndNil(aSchema);
+      FCurrentUserSchema:=nil;
     end;
-  end else
-    raise ENilUserSchema.Create;
+  end else begin
+    if not Assigned(aSchema) then
+      raise ENilUserSchema.Create;
+
+    //TODO: Second user management session exception...
+  end;
 
 end;
 
