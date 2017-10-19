@@ -5,6 +5,7 @@ unit security.controls.image;
 interface
 
 uses
+  LCLVersion,
   Classes,
   ExtCtrls,
   security.manager.controls_manager;
@@ -57,8 +58,10 @@ type
     property AutoSize;
     property BorderSpacing;
     property Center;
+    {$if lcl_fullversion >= 1070000}
     property KeepOriginXWhenClipped;
     property KeepOriginYWhenClipped;
+    {$EndIf}
     property Constraints;
     property DragCursor;
     property DragMode;
@@ -79,7 +82,9 @@ type
     property OnMouseWheelUp;
     property OnPaint;
     property OnPictureChanged;
+    {$if lcl_fullversion >= 1070000}
     property OnPaintBackground;
+    {$EndIf}
     property OnResize;
     property OnStartDrag;
     property ParentShowHint;

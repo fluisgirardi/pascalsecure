@@ -67,17 +67,19 @@ uses
 { TFormAuthBased }
 
 procedure TFormAuthBased.CustomizedUserManagement1CheckUserAndPass(user,
-  pass: String; var aUID: Integer; var ValidUser: Boolean; LoginAction: Boolean
-  );
+  pass: String; var aUID: Integer; var ValidUser: Boolean; LoginAction: Boolean);
+var
+  aUser: TCustomUser;
 begin
-  //
   //check the user login and password
   Memo1.Append('CustomizedUserManagement1CheckUserAndPass'+' ' + user + ' '+pass);
-  ValidUser:=(((user='andi')  and (pass='1')) or
-              ((user='user')  and (pass='2')) or
-              ((user='root')  and (pass='3')) or
-              ((user='fabio') and (pass='7')));
-
+  ValidUser:= False;
+  LastValidUser:= '';
+  if MySchema is TUsrAuthSchema then begin
+     aUser := TUsrAuthSchema(MySchema).UserByName[user];
+     if aUser <> nil then
+        ValidUser:= SameStr(aUser.Password,pass);
+  end;
   if ValidUser then
     LastValidUser:=user;
 end;
@@ -137,13 +139,17 @@ end;
 
 procedure TFormAuthBased.CustomizedUserManagement1CanAccess(securityCode: String;
   var CanAccess: Boolean);
+var
+  aUser: TAuthorizedUser;
 begin
   Memo1.Append('CustomizedUserManagement1CanAccess'+' '+securityCode);
+  CanAccess:= False;
   //check if the current user can access the securityCode
-  CanAccess :=((LastValidUser='andi') and (securityCode='autorizacao1')) or
-              ((LastValidUser='user') and (securityCode='autorizacao2')) or
-              ((LastValidUser='root') and ((securityCode='autorizacao1') or (securityCode='autorizacao2')));
-
+  if MySchema is TUsrAuthSchema then begin
+     aUser := TAuthorizedUser(TUsrAuthSchema(MySchema).UserByName[LastValidUser]);
+     if aUser <> nil then
+       CanAccess:= (aUser.AuthorizationByName[securityCode] <> nil);
+  end;
 end;
 
 procedure TFormAuthBased.BuLogoutClick(Sender: TObject);
@@ -158,7 +164,7 @@ begin
   Memo1.Clear;
   Memo1.Append('Create and build Schema');
   //BuildSchemaUser(MySchemaTyp, MySchema);
-  BuildSchemaUserFromDB(MySchemaTyp, MySchema);
+  BuildSchemaUser(MySchemaTyp, MySchema);
   Memo1.Append('-------------------------');
   Memo1.Append('Login as Username/Password');
   Memo1.Append('   root     3');
