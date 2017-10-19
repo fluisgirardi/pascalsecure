@@ -157,7 +157,8 @@ begin
   MySchema:= nil;
   Memo1.Clear;
   Memo1.Append('Create and build Schema');
-  BuildSchemaUser(MySchemaTyp, MySchema);
+  //BuildSchemaUser(MySchemaTyp, MySchema);
+  BuildSchemaUserFromDB(MySchemaTyp, MySchema);
   Memo1.Append('-------------------------');
   Memo1.Append('Login as Username/Password');
   Memo1.Append('   root     3');

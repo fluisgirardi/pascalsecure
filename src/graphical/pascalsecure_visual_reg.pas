@@ -60,6 +60,7 @@ uses
   security.controls.scrollbox,
   security.controls.speedbutton,
   security.controls.statictext,
+  security.controls.SecureTabsheet,
   security.controls.togglebox,
   security.controls.trackbar,
   security.controls.updown,
@@ -146,7 +147,7 @@ begin
                                               TSecureDBNavigator,
                                               TSecureDBText]);
 
-
+  RegisterNoIcon([TSecureTabSheet]);
 
   RegisterProjectFileDescriptor(TSecureFormFileDescriptor.Create);
   RegisterProjectFileDescriptor(TSecureFrameFileDescriptor.Create);
