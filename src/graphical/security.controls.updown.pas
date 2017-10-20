@@ -5,6 +5,7 @@ unit security.controls.updown;
 interface
 
 uses
+  LCLVersion,
   Classes,
   ComCtrls,
   security.manager.controls_manager;
@@ -61,7 +62,9 @@ type
     property Increment;
     property Max;
     property Min;
+    {$if lcl_fullversion >= 1070000}
     property MinRepeatInterval;
+    {$EndIf}
     property OnChanging;
     property OnChangingEx;
     property OnClick;
@@ -85,7 +88,9 @@ type
     property TabOrder;
     property TabStop;
     property Thousands;
-    property Flat;
+    {$if lcl_fullversion >= 1070000}
+     property Flat;
+    {$endif}
     property Visible;
     property Wrap;
   end;

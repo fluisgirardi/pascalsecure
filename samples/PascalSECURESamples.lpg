@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectGroup FileVersion="1">
-    <Targets Count="1">
+    <Targets Count="2">
       <Target0 FileName="LoginBase\Login03.lpi">
         <BuildModes Count="2"/>
         <Mode1 Name="Debug"/>
         <Mode2 Name="Release"/>
       </Target0>
+      <Target1 FileName="LoginAuthBased\LoginAuthBased.lpi">
+        <BuildModes Count="2"/>
+        <Mode1 Name="Debug" Compile="True"/>
+        <Mode2 Name="Release"/>
+      </Target1>
     </Targets>
   </ProjectGroup>
 </CONFIG>
