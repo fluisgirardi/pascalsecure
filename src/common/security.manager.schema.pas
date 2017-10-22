@@ -686,6 +686,7 @@ end;
 
 procedure TUserWithLevelAccess.ResetModified;
 begin
+  inherited;
   FOldUserLevel := FUserLevel;
 end;
 
