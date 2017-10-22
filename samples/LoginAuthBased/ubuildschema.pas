@@ -27,7 +27,7 @@ uses
 function BuildSchemaLVL(var ASchemaTyp: TUsrMgntType;var ASchema: TUsrMgntSchema):Boolean;
 begin
   result := false;
-  ASchemaTyp:= TUsrMgntType.umtLevel;
+  ASchemaTyp:= TUsrLevelMgntSchema.UsrMgntType;
   ASchema:=TUsrLevelMgntSchema.Create(1, 100, 1);
   with ASchema as TUsrLevelMgntSchema do begin
     UserList.Add(0,TUserWithLevelAccess.Create(0,'root','1','Main administrator',false, 1));
@@ -42,7 +42,7 @@ var
   AAuthorization: TAuthorization;
 begin
   result := false;
-  ASchemaTyp:= TUsrMgntType.umtAuthorizationByUser;
+  ASchemaTyp:= TUsrAuthSchema.UsrMgntType;
   ASchema:=TUsrAuthSchema.Create;
   // root
   AUser:= TAuthorizedUser.Create(0,'root','1','administrator',false);
@@ -72,15 +72,17 @@ var
   FileName: String;
   Key: String;
   KeyIndex: Integer;
+  aUser: TCustomUser;
 begin
   DebugLnEnter({$I %FILE%},{$I %LINE%},'BuildSchemaUserFromDB');
   Result:= False;
   // Create a basic schema
   { TODO -oANdi : What should we if an old Schema exists ?}
-  ASchemaTyp:= TUsrMgntType.umtAuthorizationByUser;
   // if no Schema exist, create a new one
-  if not Assigned(ASchema) then
+  if not Assigned(ASchema) then begin
+    ASchemaTyp:= TUsrAuthSchema.UsrMgntType;
     ASchema:=TUsrAuthSchema.Create;
+  end;
   {$IFNDEF LocalFile}
   FileName:= ChangeFileExt(LazFileUtils.GetAppConfigFileUTF8(False, False, True),'.bds'); ;
   DebugLn('Filename=',FileName);
@@ -122,8 +124,22 @@ begin
     BDS.First;
     while not BDS.EOF do begin
       // First step: search for the user
-      //Key := BDS.FieldByName('UserName').AsString;
-      //KeyIndex:= TUsrAuthSchema(ASchema).UserList.IndexOfData(Key);
+      Key := BDS.FieldByName('UserName').AsString;
+      aUser := TUsrAuthSchema(MySchema).UserByName[Key];
+      if (aUser = nil) then begin
+        // User not found
+        aAUser:= TAuthorizedUser.Create(BDS.FieldByName('UserID').AsInteger,
+                                        Key,
+                                        BDS.FieldByName('UserPassword').AsString,
+                                        Key,
+                                        BDS.FieldByName('UserActive').AsBoolean);
+
+      end;
+      //AAuthorization:= TAuthorization.Create(0,'autorizacao1');
+      //AUser.AuthorizationList.Add(0,AAuthorization);
+      //AAuthorization:= TAuthorization.Create(0,'autorizacao2');
+      //AUser.AuthorizationList.Add(0,AAuthorization);
+      //TUsrAuthSchema(ASchema).UserList.Add(0,AUser);
 
 
 
