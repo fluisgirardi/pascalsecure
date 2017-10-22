@@ -1,0 +1,132 @@
+object FormAuthBased: TFormAuthBased
+  Left = 0
+  Height = 401
+  Top = 0
+  Width = 873
+  ActiveControl = SecureButton1
+  Caption = 'User Authentication'
+  ClientHeight = 401
+  ClientWidth = 873
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '1.6.4.0'
+  Visible = False
+  object SecureButton1: TSecureButton
+    AnchorSideLeft.Control = BuLogout
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrCenter
+    Left = 421
+    Height = 25
+    Top = 5
+    Width = 99
+    BorderSpacing.Left = 20
+    Caption = 'SecureButton1'
+    OnClick = SecureButton1Click
+    SecurityCode = 'autorizacao1'
+    TabOrder = 0
+    Visible = False
+    SecureHideOrEnable = True
+  end
+  object BuLogout: TButton
+    AnchorSideLeft.Control = BuGraphLogin
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BuGraphLogin
+    AnchorSideTop.Side = asrCenter
+    Left = 326
+    Height = 25
+    Top = 5
+    Width = 75
+    BorderSpacing.Left = 20
+    Caption = 'Logout'
+    OnClick = BuLogoutClick
+    TabOrder = 1
+  end
+  object Memo1: TMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 366
+    Top = 35
+    Width = 873
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 5
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 2
+  end
+  object SecureButton2: TSecureButton
+    AnchorSideLeft.Control = SecureButton1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Side = asrCenter
+    Left = 540
+    Height = 25
+    Top = 5
+    Width = 99
+    BorderSpacing.Left = 20
+    Caption = 'SecureButton2'
+    OnClick = SecureButton1Click
+    SecurityCode = 'autorizacao1'
+    TabOrder = 3
+    SecureHideOrEnable = False
+  end
+  object BuGraphLogin: TButton
+    AnchorSideLeft.Control = BuManage
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = BuManage
+    AnchorSideTop.Side = asrCenter
+    Left = 199
+    Height = 25
+    Top = 5
+    Width = 107
+    Action = LoginAction1
+    BorderSpacing.Left = 10
+    TabOrder = 4
+  end
+  object BuManage: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 5
+    Height = 25
+    Top = 5
+    Width = 184
+    Action = ManageUsersAndGroupsAction1
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    TabOrder = 5
+  end
+  object UserCustomizedUserManagement1: TUserCustomizedUserManagement
+    LoginRetries = 0
+    LoginFrozenTime = 0
+    UsrMgntInterface = GraphicalUsrMgntInterface1
+    OnCheckUserAndPass = CustomizedUserManagement1CheckUserAndPass
+    OnGetUserName = UserCustomizedUserManagement1GetUserName
+    OnGetUserLogin = CustomizedUserManagement1GetUserLogin
+    OnCanAccess = CustomizedUserManagement1CanAccess
+    OnLogout = UserCustomizedUserManagement1Logout
+    OnGetSchemaType = UserCustomizedUserManagement1GetSchemaType
+    OnGetUserSchema = UserCustomizedUserManagement1GetUserSchema
+    left = 151
+    top = 104
+  end
+  object ActionList1: TActionList
+    left = 151
+    top = 256
+    object LoginAction1: TLoginAction
+      Category = 'PascalSecure Actions'
+      Caption = 'Graphical login'
+    end
+    object ManageUsersAndGroupsAction1: TManageUsersAndGroupsAction
+      Category = 'PascalSecure Actions'
+      Caption = 'Manage users and groups'
+    end
+  end
+  object GraphicalUsrMgntInterface1: TGraphicalUsrMgntInterface
+    left = 151
+    top = 168
+  end
+end
