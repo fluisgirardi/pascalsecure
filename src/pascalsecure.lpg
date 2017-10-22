@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectGroup FileVersion="1">
-    <Targets Count="2">
+    <Targets Count="4">
       <Target0 FileName="common\pascalsecure.lpk"/>
       <Target1 FileName="graphical\pascalsecure_visual.lpk"/>
+      <Target2 FileName="tests\GUITest_Common.lpi">
+        <BuildModes Count="1"/>
+        <Mode1 Name="Default"/>
+      </Target2>
+      <Target3 FileName="tests\TestCommon.lpi">
+        <BuildModes Count="1"/>
+        <Mode1 Name="Default"/>
+      </Target3>
     </Targets>
   </ProjectGroup>
 </CONFIG>
