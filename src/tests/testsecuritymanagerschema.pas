@@ -225,11 +225,13 @@ begin
     AssertNotNull('User at index 0 cannot access AuthID 1',       TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByID[1]);
     AssertNotNull('User at index 0 cannot access AuthID 2',       TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByID[2]);
     AssertNotNull('User at index 0 cannot access AuthID 3',       TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByID[3]);
+    AssertNull   ('User at index 0 has access to invalid auth',   TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByID[100]);
 
     AssertNotNull('User at index 0 cannot access "autorizacao1"', TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByName['autorizacao1']);
     AssertNotNull('User at index 0 cannot access "autorizacao2"', TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByName['autorizacao2']);
     AssertNotNull('User at index 0 cannot access "autorizacao3"', TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByName['autorizacao3']);
     AssertNotNull('User at index 0 cannot access "autorizacao4"', TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByName['autorizacao4']);
+    AssertNull   ('User at index 0 has access to invalid auth',   TAuthorizedUser(TUsrAuthSchema(ASchema).User[0]).AuthorizationByName['invalid auth']);
 
     AssertEquals ('UID 0 auth count is not correct',    TAuthorizedUser(TUsrAuthSchema(ASchema).UserByUID[0]).AuthorizationCount, 4);
     AssertNotNull('UID 0 cannot access AuthID 0',       TAuthorizedUser(TUsrAuthSchema(ASchema).UserByUID[0]).AuthorizationByID[0]);
@@ -372,6 +374,11 @@ begin
     // Reset the modified flag
     TUsrAuthSchema(ASchema).UserList.Data[1].ResetModified;
     AssertEquals('UserList.Data[1] Modified is not false after reset',TUsrAuthSchema(ASchema).UserList.Data[1].Modified,false);
+
+    //check invalid users
+    AssertNull  ('A invalid user was returned by ID',        TUsrAuthSchema(ASchema).UserByUID[3]);
+    AssertNull  ('A invalid user was returned by name',      TUsrAuthSchema(ASchema).UserByName['invalid']);
+
     // Clear Userlist
     TUsrAuthSchema(ASchema).UserList.Clear;
     AssertEquals('userlist is not empty after clear',TUsrAuthSchema(ASchema).UserList.Count,0);
