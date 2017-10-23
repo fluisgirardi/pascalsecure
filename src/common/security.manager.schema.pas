@@ -388,13 +388,16 @@ end;
 function TUsrAuthSchema.GetUserByName(aLogin: UTF8String): TCustomUser;
 var
   i: Integer;
+  AuxResult: TAuthorizedUser;
 begin
   Result:=nil;
   if assigned(FUserList) then
     for i:= 0 to FUserList.Count-1 do begin
-       Result:= FUserList.Data[i];
-       if SameStr(aLogin,Result.Login) then
+       AuxResult:= FUserList.Data[i];
+       if SameStr(aLogin,AuxResult.Login) then begin
+         Result:=AuxResult;
          break;
+       end;
     end; // for
 end;
 
@@ -553,13 +556,16 @@ function TAuthorizedUser.GetAuthorizationByName(AuthorizationName: UTF8String
   ): TAuthorization;
 var
   i: Integer;
+  AuxResult: TAuthorization;
 begin
   Result:=nil;
   if assigned(FUserAuthorizations) then
     for i:= 0 to FUserAuthorizations.Count-1 do begin
-       Result:= FUserAuthorizations.Data[i];
-       if SameStr(AuthorizationName,Result.Description) then
+       AuxResult:= FUserAuthorizations.Data[i];
+       if SameStr(AuthorizationName,AuxResult.Description) then begin
+         Result:=AuxResult;
          break;
+       end;
     end; // for
 end;
 

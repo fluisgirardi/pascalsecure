@@ -39,30 +39,40 @@ end;
 function BuildSchemaUser(var ASchemaTyp: TUsrMgntType;var ASchema: TUsrMgntSchema):Boolean;
 var
   AUser: TAuthorizedUser;
-  AAuthorization: TAuthorization;
 begin
   result := false;
   ASchemaTyp:= TUsrMgntType.umtAuthorizationByUser;
   ASchema:=TUsrAuthSchema.Create;
+  with (ASchema as TUsrAuthSchema) do begin
+    //                +this should be equal to-+
+    //                ⬇                        ⬇
+    Autorizations.Add(0, TAuthorization.Create(0,'autorizacao1'));
+    Autorizations.Add(1, TAuthorization.Create(1,'autorizacao2'));
+    Autorizations.Add(2, TAuthorization.Create(2,'autorizacao3'));
+    Autorizations.Add(3, TAuthorization.Create(3,'autorizacao4'));
+  end;
   // root
+  //this one should be equal     ⬇
   AUser:= TAuthorizedUser.Create(0,'root','1','administrator',false);
-  AAuthorization:= TAuthorization.Create(0,'autorizacao1');
-  AUser.AuthorizationList.Add(0,AAuthorization);
-  AAuthorization:= TAuthorization.Create(0,'autorizacao2');
-  AUser.AuthorizationList.Add(0,AAuthorization);
+  AUser.AuthorizationList.Add(0,(ASchema as TUsrAuthSchema).Autorizations.KeyData[0]);
+  AUser.AuthorizationList.Add(1,(ASchema as TUsrAuthSchema).Autorizations.KeyData[1]);
+  AUser.AuthorizationList.Add(2,(ASchema as TUsrAuthSchema).Autorizations.KeyData[2]);
+  AUser.AuthorizationList.Add(3,(ASchema as TUsrAuthSchema).Autorizations.KeyData[3]);
+  //with this one                      ⬇
   TUsrAuthSchema(ASchema).UserList.Add(0,AUser);
+
+
   // andi
   AUser:= TAuthorizedUser.Create(1,'andi','2','User Andi',false);
-  AAuthorization:= TAuthorization.Create(0,'autorizacao1');
-  AUser.AuthorizationList.Add(0,AAuthorization);
-  AAuthorization:= TAuthorization.Create(0,'autorizacao2');
-  AUser.AuthorizationList.Add(0,AAuthorization);
-  TUsrAuthSchema(ASchema).UserList.Add(0,AUser);
+  AUser.AuthorizationList.Add(0,(ASchema as TUsrAuthSchema).Autorizations.KeyData[0]);
+  AUser.AuthorizationList.Add(1,(ASchema as TUsrAuthSchema).Autorizations.KeyData[1]);
+  AUser.AuthorizationList.Add(2,(ASchema as TUsrAuthSchema).Autorizations.KeyData[2]);
+  TUsrAuthSchema(ASchema).UserList.Add(1,AUser);
+
   // user
   AUser:= TAuthorizedUser.Create(2,'user','3','Another User',false);
-  AAuthorization:= TAuthorization.Create(0,'autorizacao1');
-  AUser.AuthorizationList.Add(0,AAuthorization);
-  TUsrAuthSchema(ASchema).UserList.Add(0,AUser);
+  AUser.AuthorizationList.Add(0,(ASchema as TUsrAuthSchema).Autorizations.KeyData[0]);
+  TUsrAuthSchema(ASchema).UserList.Add(2,AUser);
 end;
 
 function BuildSchemaUserFromDB(var ASchemaTyp: TUsrMgntType;

@@ -9,8 +9,6 @@ object FormAuthBased: TFormAuthBased
   ClientWidth = 873
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '1.6.4.0'
-  Visible = False
   object SecureButton1: TSecureButton
     AnchorSideLeft.Control = BuLogout
     AnchorSideLeft.Side = asrBottom
@@ -70,7 +68,7 @@ object FormAuthBased: TFormAuthBased
     BorderSpacing.Left = 20
     Caption = 'SecureButton2'
     OnClick = SecureButton1Click
-    SecurityCode = 'autorizacao1'
+    SecurityCode = 'autorizacao2'
     TabOrder = 3
     SecureHideOrEnable = False
   end
@@ -110,12 +108,12 @@ object FormAuthBased: TFormAuthBased
     OnLogout = UserCustomizedUserManagement1Logout
     OnGetSchemaType = UserCustomizedUserManagement1GetSchemaType
     OnGetUserSchema = UserCustomizedUserManagement1GetUserSchema
-    left = 151
-    top = 104
+    Left = 151
+    Top = 104
   end
   object ActionList1: TActionList
-    left = 151
-    top = 256
+    Left = 151
+    Top = 256
     object LoginAction1: TLoginAction
       Category = 'PascalSecure Actions'
       Caption = 'Graphical login'
@@ -126,7 +124,7 @@ object FormAuthBased: TFormAuthBased
     end
   end
   object GraphicalUsrMgntInterface1: TGraphicalUsrMgntInterface
-    left = 151
-    top = 168
+    Left = 151
+    Top = 168
   end
 end

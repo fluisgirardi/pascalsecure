@@ -59,7 +59,7 @@ var
 implementation
 
 uses
-  security.manager.controls_manager, ubuildschema;
+  security.manager.controls_manager, ubuildschema, strutils;
 
 {$R *.lfm}
 
@@ -142,7 +142,6 @@ procedure TFormAuthBased.CustomizedUserManagement1CanAccess(securityCode: String
 var
   aUser: TAuthorizedUser;
 begin
-  Memo1.Append('CustomizedUserManagement1CanAccess'+' '+securityCode);
   CanAccess:= False;
   //check if the current user can access the securityCode
   if MySchema is TUsrAuthSchema then begin
@@ -150,6 +149,7 @@ begin
      if aUser <> nil then
        CanAccess:= (aUser.AuthorizationByName[securityCode] <> nil);
   end;
+  Memo1.Append('CustomizedUserManagement1CanAccess'+' '+securityCode+' = '+ifthen(CanAccess,'TRUE', 'FALSE'));
 end;
 
 procedure TFormAuthBased.BuLogoutClick(Sender: TObject);
@@ -167,9 +167,9 @@ begin
   BuildSchemaUser(MySchemaTyp, MySchema);
   Memo1.Append('-------------------------');
   Memo1.Append('Login as Username/Password');
-  Memo1.Append('   root     3');
+  Memo1.Append('   root     1');
   Memo1.Append('   user     2');
-  Memo1.Append('   andi     1');
+  Memo1.Append('   andi     3');
   Memo1.Append('-------------------------');
 end;
 
