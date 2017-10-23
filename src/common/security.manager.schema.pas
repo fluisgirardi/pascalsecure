@@ -135,6 +135,7 @@ type
 
   TAuthorizedUser = class(TCustomUser)
   private
+    function GetAuthorizationByID(AuthID:Integer):TAuthorization;
     function GetAuthorization(aIndex: Integer): TAuthorization;
     function GetAuthorizationByName(AuthorizationName: UTF8String
       ): TAuthorization;
@@ -151,6 +152,7 @@ type
     property AuthorizationCount:Integer read GetAuthorizationCount;
     property Authorization[Index:Integer]:TAuthorization read GetAuthorization;
     property AuthorizationByName[AuthorizationName:UTF8String]:TAuthorization read GetAuthorizationByName;
+    property AuthorizationByID[AuthID:Integer]:TAuthorization read GetAuthorizationByID;
   end;
 
   //: Implements a list of users with specific authorizations
@@ -590,6 +592,15 @@ begin
 end;
 
 { TAuthorizedUser }
+
+function TAuthorizedUser.GetAuthorizationByID(AuthID: Integer): TAuthorization;
+var
+  aux: Integer;
+begin
+  Result:=nil;
+  if assigned(FUserAuthorizations) and FUserAuthorizations.Find(AuthID, aux) then
+    result := FUserAuthorizations.KeyData[FUserAuthorizations.Keys[aux]];
+end;
 
 function TAuthorizedUser.GetAuthorization(aIndex: Integer): TAuthorization;
 begin
