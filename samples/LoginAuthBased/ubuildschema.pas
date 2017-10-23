@@ -83,6 +83,7 @@ var
   Key: String;
   KeyIndex: Integer;
   aUser: TCustomUser;
+  aAUser: TAuthorizedUser;
 begin
   DebugLnEnter({$I %FILE%},{$I %LINE%},'BuildSchemaUserFromDB');
   Result:= False;
@@ -135,7 +136,7 @@ begin
     while not BDS.EOF do begin
       // First step: search for the user
       Key := BDS.FieldByName('UserName').AsString;
-      aUser := TUsrAuthSchema(MySchema).UserByName[Key];
+      aUser := TUsrAuthSchema(ASchema).UserByName[Key];
       if (aUser = nil) then begin
         // User not found
         aAUser:= TAuthorizedUser.Create(BDS.FieldByName('UserID').AsInteger,

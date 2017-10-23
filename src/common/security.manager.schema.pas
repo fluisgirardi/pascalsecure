@@ -445,7 +445,7 @@ var
 begin
   Result:=nil;
   if assigned(FUserList) and FUserList.Find(aUID, aKeyIdx) then
-    Result := FUserList.KeyData[FUserList.Keys[aUID]];
+    Result := FUserList.KeyData[FUserList.Keys[aKeyIdx]];
 end;
 
 function TUsrAuthSchema.GetUserCount: Integer;
@@ -457,6 +457,7 @@ constructor TUsrAuthSchema.Create;
 begin
   inherited Create;
   FUserList:=TAuthorizedUserList.Create;
+  FUserList.Sorted:=true;
 end;
 
 destructor TUsrAuthSchema.Destroy;
@@ -636,6 +637,7 @@ constructor TAuthorizedUser.Create(aUID: Integer; aUserLogin, aUserPassword,
 begin
   inherited Create(aUID,aUserLogin,aUserPassword,aUserDescription,aBlockedUser);
   FUserAuthorizations:=TAuthorizationList.Create;
+  FUserAuthorizations.Sorted:=true;
 end;
 
 constructor TAuthorizedUser.Create(aUID: Integer; aUserLogin,
