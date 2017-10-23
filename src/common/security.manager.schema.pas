@@ -204,7 +204,13 @@ type
   TUsrGroupList = specialize TFPGMap<Integer, TUsersGroup>;
 
   //: Implements the entire user management schema.
-  TUsrMgntSchema = class(TObject);
+
+  { TUsrMgntSchema }
+
+  TUsrMgntSchema = class(TObject)
+  public
+    class function UsrMgntType:TUsrMgntType; virtual;
+  end;
 
   {:
   Implements a user level based schema.
@@ -217,6 +223,9 @@ type
   This schema is similar to the security system used in Elipse SCADA
   and in Wonderware Intouch.
   }
+
+  { TUsrLevelMgntSchema }
+
   TUsrLevelMgntSchema = class(TUsrMgntSchema)
   protected
     FMaxLevel: Integer;
@@ -226,6 +235,7 @@ type
   public
     constructor Create(aMinLevel, aMaxLevel, aAdminLevel:Integer);
     destructor Destroy; override;
+    class function UsrMgntType:TUsrMgntType; override;
   published
     function UserList:TUserLevelList;
     property AdminLevel:Integer read FAdminLevel;
@@ -271,6 +281,7 @@ type
   public
     constructor Create; override;
     destructor Destroy; override;
+    class function UsrMgntType:TUsrMgntType; override;
     function UserList:TAuthorizedUserList;
     property UserCount:Integer read GetUserCount;
     property User[Index:Integer]:TCustomUser read GetUser;
@@ -291,12 +302,16 @@ type
 
   This schema is similar to the securty system used in Rockwell FactoryTalk.
   }
+
+  { TUsrGroupAuthSchema }
+
   TUsrGroupAuthSchema = class(TUsrAuthSchema)
   protected
     FGroupList:TUsrGroupList;
   public
     constructor Create; override;
     destructor Destroy; override;
+    class function UsrMgntType:TUsrMgntType; override;
     function GroupList:TUsrGroupList;
   end;
 
@@ -312,6 +327,9 @@ type
      the group.
   ** A list with all authorizations available on the security manager.
   }
+
+  { TGroupAuthSchema }
+
   TGroupAuthSchema = class(TAuthBasedUsrMgntSchema)
   protected
     FUserList:TUserList;
@@ -319,6 +337,7 @@ type
   public
     constructor Create; override;
     destructor Destroy; override;
+    class function UsrMgntType:TUsrMgntType; override;
     function UserList:TUserList;
     function GroupList:TSimpleUserGroupList;
   end;
@@ -326,6 +345,13 @@ type
 implementation
 
 uses security.exceptions;
+
+{ TUsrMgntSchema }
+
+class function TUsrMgntSchema.UsrMgntType: TUsrMgntType;
+begin
+  Result:= umtUnknown;
+end;
 
 function TUsersGroup.AddUser(const aUser: TAuthorizedUser): Boolean;
 begin
@@ -351,6 +377,11 @@ begin
   inherited Destroy;
 end;
 
+class function TGroupAuthSchema.UsrMgntType: TUsrMgntType;
+begin
+  Result:= TUsrMgntType.umtAuthorizationByGroup;
+end;
+
 function TGroupAuthSchema.UserList: TUserList;
 begin
   Result:=FUserList;
@@ -371,6 +402,11 @@ destructor TUsrGroupAuthSchema.Destroy;
 begin
   FreeAndNil(FGroupList);
   inherited Destroy;
+end;
+
+class function TUsrGroupAuthSchema.UsrMgntType: TUsrMgntType;
+begin
+  Result:= TUsrMgntType.umtAuthorizationByUserAndGroup;
 end;
 
 function TUsrGroupAuthSchema.GroupList: TUsrGroupList;
@@ -427,6 +463,11 @@ begin
   inherited Destroy;
 end;
 
+class function TUsrAuthSchema.UsrMgntType: TUsrMgntType;
+begin
+  Result:= TUsrMgntType.umtAuthorizationByUser;
+end;
+
 function TUsrAuthSchema.UserList: TAuthorizedUserList;
 begin
   Result:=FUserList;
@@ -471,6 +512,11 @@ begin
   end;
 
   inherited Destroy;
+end;
+
+class function TUsrLevelMgntSchema.UsrMgntType: TUsrMgntType;
+begin
+  Result:= TUsrMgntType.umtLevel;
 end;
 
 function TUsrLevelMgntSchema.UserList: TUserLevelList;
@@ -646,6 +692,7 @@ end;
 
 procedure TUserWithLevelAccess.ResetModified;
 begin
+  inherited;
   FOldUserLevel := FUserLevel;
 end;
 
