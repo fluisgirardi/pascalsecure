@@ -1,5 +1,7 @@
 <b>PascalSECURE</b> is a securitysystem for the most popular standard controls of Lazarus
 
+Brought to you by Fabio Luis Girardi and Andreas Frieß
+
 <b>This is the stable repo.</b> If you are searching the development repo, take a look at https://github.com/afriess/pascalsecure/
 
 Every securecontrol (Button, Edit, TabSheets,...) can activated/deactivated by free defined keys. You have to write only the logic depended on your need. Database, Textfiles, API,... all is possible.
