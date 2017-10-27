@@ -22,5 +22,3 @@ Improve the project modularization
 This code is under modified LGPL (see LICENSE.modifiedLGPL.txt). This means that you can link this library inside your programs for any purpose. Only the included part of the code must remain LGPL.
 
 If you make some improvements to this library, please create a new issue and attach the patch of your changes.
-
-Contact : fabio at pascalscada dot com
